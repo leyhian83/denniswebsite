@@ -9,7 +9,74 @@
  * record can still be added manually.
  */
 import projectsJson from "../data/projects.json";
-import type { Project, ProjectCategory } from "../types";
+import type { Project, ProjectCategory, VideoSource } from "../types";
+
+// A single local video entry after upload.
+export interface UploadedVideo {
+  url: string;
+  fileName: string;
+}
+// A single uploaded media entry (image path or local video).
+export interface UploadedMedia {
+  url: string;
+  fileName: string;
+  kind: "image" | "video";
+}
+
+export type UploadMediaResult =
+  | { ok: true; items: UploadedMedia[]; folder: string }
+  | { ok: false; error: string };
+
+/**
+ * Upload media files to the dev server, saved under
+ * public/media/projects/<slug>/. Returns the public URL entries so the
+ * calling form can populate `photos` (images) and `videos` (local video).
+ */
+export async function uploadProjectMedia(files: File[], slug: string): Promise<UploadMediaResult> {
+  const imageBuf = async (f: File) => ({
+    name: f.name,
+    data: await blobToBase64(f),
+  });
+
+  try {
+    const res = await fetch("/__admin/media", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, files: await Promise.all(files.map(imageBuf)) }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) {
+      return { ok: false, error: data?.error || "Upload failed." };
+    }
+    const items = (data.files as { url: string; fileName: string; kind: string }[]).map((f) => ({
+      url: f.url,
+      fileName: f.fileName ?? f.url.split("/").pop() ?? "",
+      kind: f.kind as "image" | "video",
+    }));
+    return { ok: true, items, folder: data.folder as string };
+  } catch {
+    return { ok: false, error: "Upload unavailable in this environment." };
+  }
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.slice(result.indexOf(",") + 1));
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
+/** Best-effort local video metadata (no decode). */
+export function localVideoEntries(items: UploadedMedia[]): UploadedVideo[] {
+  return items
+    .filter((i) => i.kind === "video")
+    .map((i) => ({ url: i.url, fileName: i.fileName }));
+}
 
 const { projects } = projectsJson as { projects: Project[] };
 const ALL: Project[] = projects;
@@ -33,6 +100,7 @@ export interface ProjectInput {
   description: string;
   facilities?: string[];
   photos: string[];
+  videos?: VideoSource[];
   featured?: boolean;
 }
 
@@ -97,6 +165,7 @@ export async function createProject(input: ProjectInput): Promise<CreateProjectR
     description: input.description.trim(),
     facilities: input.facilities?.length ? input.facilities : undefined,
     photos: input.photos?.length ? input.photos : defaultPhotos(slug),
+    videos: input.videos?.length ? input.videos : undefined,
     featured: input.featured,
   };
 

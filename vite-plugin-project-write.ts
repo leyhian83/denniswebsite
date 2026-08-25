@@ -1,25 +1,115 @@
 /**
- * Dev-only middleware that lets the admin "add project" form actually write
- * to src/data/projects.json while running `npm run dev`.
+ * Dev-only middleware for the admin area.
+ *  - POST /__admin/projects  → append a project record to src/data/projects.json
+ *  - POST /__admin/media     → save uploaded photo/video files (base64 JSON) into
+ *                              public/media/projects/<slug>/ and return the public
+ *                              URLs (image) and YouTube/local video entries.
  *
- * This is NOT a database or a backend server — it's a tiny local-file write
- * shim so the prototype feature works end to end. It is registered only in
- * the Vite dev server (not the production build), and the admin service falls
- * back to a copy-and-paste path when it is unavailable.
+ * This is a tiny local-file shim so the prototype works end to end during
+ * `npm run dev`. It is NOT a database or backend. It registers only in the
+ * Vite dev server (not the production build); the admin service falls back to
+ * manual/copy-paste paths when unavailable.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import path from "node:path";
 import type { Plugin } from "vite";
 
+const IMAGE_EXT = new Set(["jpg", "jpeg", "png", "webp", "gif", "avif"]);
+const VIDEO_EXT = new Set(["mp4", "webm", "mov", "m4v"]);
+
+/** Sanitize a filename into URL-safe characters. */
+function safeName(name: string): string {
+  // Keep the extension, replace the base with safe chars.
+  const ext = path.extname(name).toLowerCase();
+  const base = path
+    .basename(name, ext)
+    .replace(/[^a-zA-Z0-9_-]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+  return `${base || "file"}${ext}`;
+}
+
 export function projectWritePlugin(): Plugin {
-  // Plugin lives at the project root, so the data file is ./src/data/projects.json.
+  // Plugin lives at the project root.
   const projectsPath = fileURLToPath(
     new URL("./src/data/projects.json", import.meta.url),
   );
+  const mediaRoot = fileURLToPath(new URL("./public/media", import.meta.url));
 
   return {
     name: "admin-project-write",
     configureServer(server) {
+      // ---- Media upload (base64 JSON transport) ----
+      server.middlewares.use("/__admin/media", (req, res) => {
+        if (req.method !== "POST") {
+          res.statusCode = 405;
+          res.end("Method Not Allowed");
+          return;
+        }
+
+        const chunks: Buffer[] = [];
+        req.on("data", (c: Buffer) => chunks.push(c));
+        req.on("end", () => {
+          try {
+            const body = Buffer.concat(chunks);
+            // ~60MB cap (base64 inflates by ~33%).
+            if (body.length > 80 * 1024 * 1024) {
+              res.statusCode = 413;
+              res.end("payload too large");
+              return;
+            }
+
+            const payload = JSON.parse(body.toString("utf8"));
+            const slug = payload.slug;
+            const files = Array.isArray(payload.files) ? payload.files : [];
+            if (!slug) {
+              res.statusCode = 400;
+              res.end("slug is required");
+              return;
+            }
+
+            const dir = path.join(mediaRoot, "projects", safeName(slug));
+            mkdirSync(dir, { recursive: true });
+
+            const saved: { file: string; url: string; kind: "image" | "video" }[] = [];
+            for (const f of files) {
+              if (!f || typeof f.data !== "string" || typeof f.name !== "string") {
+                continue;
+              }
+              const name = safeName(f.name);
+              const ext = path.extname(name).toLowerCase().replace(".", "");
+              const kind = IMAGE_EXT.has(ext) ? "image" : VIDEO_EXT.has(ext) ? "video" : null;
+              if (!kind) {
+                continue;
+              }
+              const buf = Buffer.from(f.data, "base64");
+              const fileName = `${Date.now()}-${name}`;
+              writeFileSync(path.join(dir, fileName), buf);
+              saved.push({
+                file: name,
+                url: `/media/projects/${slug}/${fileName}`,
+                kind,
+              });
+            }
+
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(
+              JSON.stringify({
+                ok: true,
+                slug,
+                files: saved,
+                folder: `/media/projects/${slug}/`,
+              }),
+            );
+          } catch (err) {
+            res.statusCode = 500;
+            res.end(String(err instanceof Error ? err.message : err));
+          }
+        });
+      });
+
+      // ---- Project record write ----
       server.middlewares.use("/__admin/projects", (req, res) => {
         if (req.method !== "POST") {
           res.statusCode = 405;

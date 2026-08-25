@@ -298,8 +298,11 @@ Both are stored in **`src/config/auth.ts`** — edit that one file to change the
 
 1. Visit `/login`, sign in, and you land on `/admin/add-project`.
 2. Fill in the project (name, developer, category, location, price range, unit types, facilities, description…). Required fields are marked; validation happens on submit.
-3. **Save project** posts the record to a tiny dev-only Vite middleware (`vite-plugin-project-write.ts`), which appends it to `src/data/projects.json`.
-4. The project immediately appears on `/projects` and its auto-generated detail page `/projects/<slug>`. Photos default to `/media/projects/<slug>/cover.jpg`.
+3. **Add photos / video** — click the uploader buttons to choose image (`jpg/png/webp/gif`) and video (`mp4/webm/mov`) files, or paste a YouTube URL for the video. Uploaded files are saved to `public/media/projects/<slug>/` and their paths automatically populate the project's `photos` and `videos` fields.
+4. **Save project** posts the record to a tiny dev-only Vite middleware (`vite-plugin-project-write.ts`), which appends it to `src/data/projects.json`.
+5. The project immediately appears on `/projects` and its auto-generated detail page `/projects/<slug>`. If no photos were added it defaults to `/media/projects/<slug>/cover.jpg`.
+
+> **Media tip:** because media lives in `public/`, after uploading a photo the dev server serves it straight from disk — just reload the page to see the new image/video.
 
 If the middleware is unavailable (e.g. a production build), the form falls back to showing the ready-to-paste JSON so you can still add the record manually.
 

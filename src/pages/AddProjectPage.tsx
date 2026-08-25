@@ -5,15 +5,19 @@ import { usePageMeta } from "../hooks/usePageMeta";
 import { useAuth } from "../context/AuthContext";
 import {
   createProject,
+  slugify,
   type ProjectInput,
   type CreateProjectResult,
+  type UploadedMedia,
 } from "../services/projectService";
+import { MediaUploader } from "../components/admin/MediaUploader";
 import {
   PROJECT_CATEGORY_LABELS,
   PROJECT_STATUS_LABELS,
   type ProjectCategory,
   type ProjectStatus,
 } from "../types/project";
+import type { VideoSource } from "../types/property";
 
 type FormValues = {
   name: string;
@@ -81,6 +85,15 @@ export function AddProjectPage() {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<CreateProjectResult | null>(null);
 
+  // Uploaded media, keyed by kind. Staged as files are chosen and included in
+  // the saved project's `photos` / `videos`.
+  const [photos, setPhotos] = useState<UploadedMedia[]>([]);
+  const [videos, setVideos] = useState<UploadedMedia[]>([]);
+  const [videoUrl, setVideoUrl] = useState("");
+
+  // Folder slug used for uploads is derived from the current project name.
+  const uploadSlug = slugify(values.name);
+
   const set = (key: keyof FormValues) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
@@ -112,6 +125,21 @@ export function AddProjectPage() {
     if (!validate()) return;
     setSubmitting(true);
 
+    // Photos: uploaded files first, then any manually typed paths.
+    const uploadedPhotos = photos.map((p) => p.url);
+    const manualPhotos = listFromCsv(values.photos) ?? [];
+    const photoUrls = [...uploadedPhotos, ...manualPhotos];
+
+    // Videos: local uploaded files, plus an optional YouTube link.
+    const videoSources: VideoSource[] = [];
+    for (const v of videos) {
+      videoSources.push({ type: "local", url: v.url });
+    }
+    const yt = videoUrl.trim();
+    if (yt) {
+      videoSources.push({ type: "youtube", url: yt });
+    }
+
     const input: ProjectInput = {
       name: values.name,
       developer: values.developer || undefined,
@@ -129,7 +157,8 @@ export function AddProjectPage() {
       unitTypes: listFromCsv(values.unitTypes),
       description: values.description,
       facilities: listFromCsv(values.facilities),
-      photos: listFromCsv(values.photos) ?? [],
+      photos: photoUrls.length ? photoUrls : [],
+      videos: videoSources.length ? videoSources : undefined,
       featured: values.featured,
     };
 
@@ -437,19 +466,58 @@ export function AddProjectPage() {
                 />
               </div>
 
-              <div className="admin-form__field admin-form__field--wide">
-                <label htmlFor="ap-photos">Photo paths (comma-separated)</label>
-                <input
-                  id="ap-photos"
-                  type="text"
-                  value={values.photos}
-                  onChange={set("photos")}
-                  placeholder="/media/projects/my-project/cover.jpg, /media/projects/my-project/lobby.jpg"
-                />
-                <span className="admin-form__hint">
-                  Leave empty to use /media/projects/&lt;slug&gt;/cover.jpg.
-                </span>
+              <div className="admin-media admin-form__field--wide">
+                <div className="admin-media__panel">
+                  <span className="admin-media__label">Photos</span>
+                  <MediaUploader
+                    slug={uploadSlug}
+                    kind="image"
+                    value={photos}
+                    onChange={setPhotos}
+                  />
+                  <p className="admin-media__caption">
+                    Upload .jpg, .png, .webp or .gif. The first photo becomes the cover.
+                  </p>
+                </div>
+
+                <div className="admin-media__panel">
+                  <span className="admin-media__label">Video</span>
+                  <MediaUploader
+                    slug={uploadSlug}
+                    kind="video"
+                    value={videos}
+                    onChange={setVideos}
+                  />
+                  <input
+                    id="ap-videourl"
+                    className="field"
+                    type="url"
+                    value={videoUrl}
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    placeholder="…or paste a YouTube URL"
+                  />
+                  <p className="admin-media__caption">
+                    Upload an .mp4 or .webm file, or link a YouTube video.
+                  </p>
+                </div>
               </div>
+
+              <details className="admin-form__details admin-form__field--wide">
+                <summary>Advanced: type photo paths manually</summary>
+                <div className="admin-form__field">
+                  <label htmlFor="ap-photos">Photo paths (comma-separated)</label>
+                  <input
+                    id="ap-photos"
+                    type="text"
+                    value={values.photos}
+                    onChange={set("photos")}
+                    placeholder="/media/projects/my-project/cover.jpg, /media/projects/my-project/lobby.jpg"
+                  />
+                  <span className="admin-form__hint">
+                    Leave empty to use /media/projects/&lt;slug&gt;/cover.jpg.
+                  </span>
+                </div>
+              </details>
             </div>
 
             <label className="admin-form__check">
