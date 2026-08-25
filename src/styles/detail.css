@@ -80,6 +80,22 @@
   font-size: var(--fs-xl);
   font-weight: 700;
   color: var(--color-whiteout);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.detail-price-mobile__negotiable,
+.detail-sidebar__price-negotiable {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(52, 211, 153, 0.16);
+  color: #7ee0b1;
 }
 @media (min-width: 1024px) {
   .detail-price-mobile {
@@ -233,11 +249,18 @@
   color: var(--color-muted-ink);
 }
 .detail-sidebar__price-value {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
   font-size: var(--fs-2xl);
   font-weight: 700;
   margin-top: var(--space-2);
   color: var(--color-ink);
+}
+.detail-sidebar__price-negotiable {
+  background: rgba(52, 211, 153, 0.14);
+  color: #0e6b47;
 }
 
 .detail-sidebar__specs {

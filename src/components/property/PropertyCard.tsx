@@ -71,7 +71,12 @@ export function PropertyCard({ property, className = "" }: PropertyCardProps) {
           <Link to={`/properties/${property.slug}`}>{property.title}</Link>
         </h3>
 
-        <p className="property-card__price">{formatPrice(property.price)}</p>
+        <p className="property-card__price">
+          {formatPrice(property.price)}
+          {property.negotiable && (
+            <span className="property-card__negotiable">Negotiable</span>
+          )}
+        </p>
 
         <p className="property-card__location">
           <MapPin size={14} aria-hidden="true" />

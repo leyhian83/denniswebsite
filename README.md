@@ -138,6 +138,9 @@ A typical record:
   bedrooms and so on.
 - `status` — `available` | `reserved` | `sold`. Only `available`/`reserved`
   show in listings.
+- `negotiable` — set to `true` to show a **"Negotiable"** label beside the price
+  and let it be filtered under **Subsale → Pricing**. Omit it (or `false`) for a
+  firm / non-negotiable price (shown as "Non-negotiable" in the filter).
 
 ---
 
@@ -240,8 +243,9 @@ anything-else                   404 page
 
 - Keyword search matches title, area, sub-area, state, property type, address
   and description (try "Mont Kiara", "condo", "Shah Alam").
-- Filters (category, residential type, state, area, price range, bedrooms) all
-  combine with each other and with search.
+- Filters (category, residential type, state, area, price range, **pricing:
+  negotiable / non-negotiable**, bedrooms) all combine with each other and with
+  search.
 - Sort: Newest | Price low→high | Price high→low.
 - On desktop filters sit in a sticky sidebar; on mobile they open in a bottom
   sheet via the "Filters" button.

@@ -19,6 +19,7 @@ export interface PropertyFilters {
   minPrice?: number;
   maxPrice?: number;
   bedrooms?: number;
+  negotiable?: "negotiable" | "non-negotiable";
   query?: string;
 }
 
@@ -88,6 +89,13 @@ export function filterProperties(
   }
   if (filter.bedrooms != null && filter.bedrooms > 0) {
     results = results.filter((p) => (p.bedrooms ?? 0) >= filter.bedrooms!);
+  }
+  if (filter.negotiable) {
+    results = results.filter((p) =>
+      filter.negotiable === "negotiable"
+        ? p.negotiable === true
+        : p.negotiable !== true,
+    );
   }
   if (filter.query) {
     const q = normalize(filter.query);

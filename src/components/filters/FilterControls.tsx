@@ -153,6 +153,22 @@ export function FilterControls({
         </select>
       </div>
 
+      <div className="filter-group">
+        <span className="filter-group__label" id="f-negotiable">Pricing</span>
+        <select
+          aria-labelledby="f-negotiable"
+          value={draft.negotiable ?? ""}
+          onChange={(e) =>
+            update({ negotiable: (e.target.value || undefined) as FiltersValue["negotiable"] })
+          }
+        >
+          <option value="">Any price</option>
+          {propertyOptions.negotiable.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+      </div>
+
       <div className="filter-controls__actions">
         {showApply && (
           <button type="submit" className="btn btn--primary">

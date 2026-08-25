@@ -98,6 +98,26 @@
   font-size: var(--fs-md);
   font-weight: 700;
   color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Pricing badge — negotiable / non-negotiable */
+.property-card__negotiable {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(52, 211, 153, 0.14);
+  color: #0e6b47;
+}
+.property-card__price .property-card__negotiable {
+  margin-left: auto;
 }
 
 .property-card__location {

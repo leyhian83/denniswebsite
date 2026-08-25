@@ -9,6 +9,8 @@ export interface FiltersValue {
   minPrice?: number;
   maxPrice?: number;
   bedrooms?: number;
+  /** Price negotiability tri-state. */
+  negotiable?: "negotiable" | "non-negotiable";
 }
 
 export interface Option {
@@ -38,6 +40,10 @@ export const propertyOptions = {
     { value: "2", label: "2+" },
     { value: "3", label: "3+" },
     { value: "4", label: "4+" },
+  ],
+  negotiable: [
+    { value: "negotiable", label: "Negotiable" },
+    { value: "non-negotiable", label: "Non-negotiable" },
   ],
 };
 

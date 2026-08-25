@@ -36,6 +36,9 @@ export interface Property {
   price: number;
   currency: "MYR";
 
+  /** When true, the asking price is negotiable (defaults to false / firm). */
+  negotiable?: boolean;
+
   bedrooms?: number;
   bathrooms?: number;
   carParks?: number;

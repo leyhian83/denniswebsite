@@ -178,7 +178,12 @@ export function PropertyDetailPage() {
               {/* Price prominent on mobile */}
               <div className="detail-price-mobile">
                 <span className="detail-price-mobile__label">Asking price</span>
-                <span className="detail-price-mobile__value">{formatPrice(property.price)}</span>
+                <span className="detail-price-mobile__value">
+                  {formatPrice(property.price)}
+                  {property.negotiable && (
+                    <span className="detail-price-mobile__negotiable">Negotiable</span>
+                  )}
+                </span>
               </div>
 
               {/* Key information */}
@@ -244,7 +249,12 @@ export function PropertyDetailPage() {
               <div className="detail-sidebar__sticky">
                 <div className="detail-sidebar__price">
                   <span className="detail-sidebar__price-label">Asking price</span>
-                  <span className="detail-sidebar__price-value">{formatPrice(property.price)}</span>
+                  <span className="detail-sidebar__price-value">
+                    {formatPrice(property.price)}
+                    {property.negotiable && (
+                      <span className="detail-sidebar__price-negotiable">Negotiable</span>
+                    )}
+                  </span>
                 </div>
                 <EnquiryCard
                   title={property.title}
