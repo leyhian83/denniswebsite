@@ -1,20 +1,18 @@
-/* Property card — premium, image-led. */
+/* Property card — haze surface on the dark canvas, gallery-led. */
 .property-card {
   background: var(--color-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-card);
   transition:
     transform var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out),
-    border-color var(--duration-base) var(--ease-out);
+    box-shadow var(--duration-base) var(--ease-out);
 }
 .property-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-card);
-  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-lg);
 }
 
 .property-card__media {
@@ -34,26 +32,34 @@
   transform: scale(1.04);
 }
 
+/* Status chips sit over photography: dark chip + tinted text. */
 .property-card__status,
 .property-card__featured {
   position: absolute;
   top: var(--space-3);
-  padding: 0.25rem 0.7rem;
+  padding: 0.3rem 0.7rem;
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(2px);
 }
 .property-card__status {
   left: var(--space-3);
-  background: var(--color-status-available-bg);
   color: var(--color-status-available);
+}
+.property-card__status--reserved {
+  color: var(--color-status-reserved);
+}
+.property-card__status--sold {
+  color: var(--color-status-sold);
 }
 .property-card__featured {
   right: var(--space-3);
-  background: var(--color-ink);
-  color: var(--color-accent-soft);
+  color: var(--color-whiteout);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .property-card__body {
@@ -69,28 +75,28 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  color: var(--color-accent-ink);
+  color: var(--color-signal-ink);
 }
 .property-card__dot {
-  color: var(--color-border-strong);
+  color: var(--color-muted-ink);
 }
 
 .property-card__title {
-  font-family: var(--font-display);
   font-size: var(--fs-lg);
   font-weight: 600;
-  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
 }
 .property-card__title a:hover {
-  color: var(--color-accent-ink);
+  color: var(--color-signal-ink);
 }
 
 .property-card__price {
   font-size: var(--fs-md);
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-ink);
 }
 
@@ -99,19 +105,19 @@
   align-items: flex-start;
   gap: var(--space-2);
   font-size: var(--fs-sm);
-  color: var(--color-muted);
+  color: var(--color-ink-soft);
   line-height: var(--lh-base);
 }
 .property-card__location svg {
   margin-top: 2px;
   flex-shrink: 0;
-  color: var(--color-accent-ink);
+  color: var(--color-signal-ink);
 }
 
 .property-card__specs {
   margin-top: var(--space-3);
   padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(27, 27, 27, 0.12);
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
@@ -122,10 +128,10 @@
   gap: var(--space-1);
   font-size: var(--fs-sm);
   color: var(--color-ink-soft);
-  font-weight: 600;
+  font-weight: 500;
 }
 .property-card__spec svg {
-  color: var(--color-accent-ink);
+  color: var(--color-signal-ink);
 }
 
 /* Grid container used by listing pages */

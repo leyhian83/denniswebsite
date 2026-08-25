@@ -11,11 +11,17 @@ import { AreasPage } from "./pages/AreasPage";
 import { AreaDetailPage } from "./pages/AreaDetailPage";
 import { ContactPage } from "./pages/ContactPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { LoginPage } from "./pages/LoginPage";
+import { AddProjectPage } from "./pages/AddProjectPage";
+import { ProtectedRoute } from "./components/admin/ProtectedRoute";
 
 export default function App() {
   return (
     <BrowserRouter basename={SITE.basePath}>
       <Routes>
+        {/* Standalone admin login (no site chrome) */}
+        <Route path="login" element={<LoginPage />} />
+
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
@@ -48,6 +54,16 @@ export default function App() {
 
           {/* Contact */}
           <Route path="contact" element={<ContactPage />} />
+
+          {/* Admin — add new projects (login required) */}
+          <Route
+            path="admin/add-project"
+            element={
+              <ProtectedRoute>
+                <AddProjectPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />

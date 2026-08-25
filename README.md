@@ -229,6 +229,8 @@ WhatsApp CTAs, and enquiry cards. The **WhatsApp number is read from
 /areas/:stateSlug               Areas in one state
 /areas/:stateSlug/:areaSlug     Area detail with listings
 /contact                        Contact form + details
+/login                          Admin login (abc123 / qwerty12345)
+/admin/add-project              Add a project (login required)
 anything-else                   404 page
 ```
 
@@ -261,14 +263,45 @@ desktop (1440px):
 
 ## 🎨 Design system
 
-Everything derives from CSS variables in `src/styles/tokens.css` — colour,
-typography (Playfair Display headings + Mulish body), spacing scale, container
-widths, radius, shadows, image aspect ratios, breakpoints, motion. Components
-use these tokens instead of ad-hoc values, so the whole site reads as one system.
+Everything derives from CSS variables in `src/styles/tokens.css`, following the **"Air" design language** (dark atmospheric canvas, full-bleed photography, compressed display type):
 
-The visual language is **image-led and editorial**: strong property photography
-with generous whitespace, restrained gold accents, and a deep ink-navy/dark-green
-for CTAs — deliberately avoiding "generic SaaS dashboard" aesthetics.
+- **Palette** — Black Void `#000` / near-black canvas `#0a0a0a`, Haze `#f5f5f5` cards & inputs, Whiteout `#fff` text, Twilight Blue `#426188` (large heading accents) and Signal Blue `#2b7fff` (links & tags only — never the primary CTA)
+- **Typography** — Anton (compressed, uppercase) for poster-scale headlines only, Inter medium-weight for the interface, Caveat for cursive accent words inside headlines
+- **Radius ladder** — 4px inputs, 8px buttons, 12px cards/images; pills only for filter/toggle controls
+- **Rules** — no gradients (photography + flat contrast carry depth), no glassmorphism, no new radii
+
+Components use these tokens instead of ad-hoc values, so the whole site reads as one system. The visual language is **image-led and editorial**: strong property photography on a dark canvas with quiet, premium typography — deliberately avoiding "generic SaaS dashboard" aesthetics.
+
+---
+
+## 🔐 Admin: login + adding projects from the website
+
+There is a prototype admin area so you can add new projects without touching code:
+
+| Route | Purpose |
+| --- | --- |
+| `/login` | Admin sign-in (standalone page) |
+| `/admin/add-project` | Protected form that adds a project to `src/data/projects.json` |
+
+**Credentials (MVP):**
+
+```
+user ID:  abc123
+password: qwerty12345
+```
+
+Both are stored in **`src/config/auth.ts`** — edit that one file to change them. The session lives in `sessionStorage` (a tab refresh stays logged in; closing the tab logs out). A discreet **Admin** link sits in the footer.
+
+> ⚠️ This is client-side auth — fine as a prototype gate, but anyone with the source can read the credentials. Replace with a real backend login before going live.
+
+### How the add-project form works
+
+1. Visit `/login`, sign in, and you land on `/admin/add-project`.
+2. Fill in the project (name, developer, category, location, price range, unit types, facilities, description…). Required fields are marked; validation happens on submit.
+3. **Save project** posts the record to a tiny dev-only Vite middleware (`vite-plugin-project-write.ts`), which appends it to `src/data/projects.json`.
+4. The project immediately appears on `/projects` and its auto-generated detail page `/projects/<slug>`. Photos default to `/media/projects/<slug>/cover.jpg`.
+
+If the middleware is unavailable (e.g. a production build), the form falls back to showing the ready-to-paste JSON so you can still add the record manually.
 
 ---
 
@@ -314,3 +347,4 @@ with your real listings to go live.
 | `npm run preview` | Serve the production build |
 | `npm run lint` | Lint (oxlint) |
 | `node scripts/qa-verify.mjs` | Headless end-to-end sanity check (dev server must be running) |
+| `node scripts/qa-admin.mjs` | Headless QA for login, add-project + Air restyle (dev server must be running) |

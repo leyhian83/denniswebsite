@@ -1,4 +1,4 @@
-/* Property / project detail pages. */
+/* Property / project detail pages — dark canvas, hairline sections. */
 
 .detail-layout {
   display: grid;
@@ -31,18 +31,18 @@
 }
 .detail-tab {
   padding: 0.6rem 1.1rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--color-muted);
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   transition: color var(--duration-fast) var(--ease-standard);
 }
 .detail-tab:hover {
-  color: var(--color-ink);
+  color: var(--color-whiteout);
 }
 .detail-tab.is-active {
-  color: var(--color-ink);
-  border-bottom-color: var(--color-accent);
+  color: var(--color-whiteout);
+  border-bottom-color: var(--color-signal);
 }
 
 .detail-video {
@@ -54,8 +54,8 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   border: none;
-  border-radius: var(--radius-md);
-  background: var(--color-ink);
+  border-radius: var(--radius-lg);
+  background: var(--color-void);
 }
 .detail-video__frame--local {
   display: block;
@@ -71,14 +71,15 @@
 }
 .detail-price-mobile__label {
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   color: var(--color-muted);
 }
 .detail-price-mobile__value {
   font-size: var(--fs-xl);
-  font-weight: 800;
+  font-weight: 700;
+  color: var(--color-whiteout);
 }
 @media (min-width: 1024px) {
   .detail-price-mobile {
@@ -98,13 +99,14 @@
   border-bottom: none;
 }
 .detail-section__title {
-  font-family: var(--font-display);
   font-size: var(--fs-lg);
   font-weight: 600;
+  letter-spacing: var(--tracking-tight);
   margin-bottom: var(--space-5);
+  color: var(--color-whiteout);
 }
 
-/* Specs grid */
+/* Specs grid — dark panels with whiteout values */
 .detail-specs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -117,7 +119,8 @@
 }
 .detail-spec {
   background: var(--color-surface-alt);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
@@ -128,25 +131,24 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   color: var(--color-muted);
 }
 .detail-spec__label svg {
-  color: var(--color-accent-ink);
+  color: var(--color-signal);
   flex-shrink: 0;
 }
 .detail-spec__value {
-  font-family: var(--font-display);
   font-size: var(--fs-md);
   font-weight: 600;
-  color: var(--color-ink);
+  color: var(--color-whiteout);
 }
 
 /* Description */
 .detail-description {
-  color: var(--color-ink-soft);
+  color: var(--color-muted);
   line-height: var(--lh-loose);
   max-width: 58ch;
 }
@@ -168,7 +170,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-weight: 600;
+  font-weight: 500;
+  color: var(--color-whiteout);
 }
 .detail-feature svg {
   color: var(--color-status-available);
@@ -196,11 +199,12 @@
 }
 .detail-location__row dt {
   color: var(--color-muted);
-  font-weight: 600;
+  font-weight: 500;
 }
 .detail-location__row dd {
   text-align: right;
-  font-weight: 600;
+  font-weight: 500;
+  color: var(--color-whiteout);
 }
 .detail-location__note {
   margin-top: var(--space-5);
@@ -211,28 +215,29 @@
   color: var(--color-muted);
 }
 
-/* ----- Sidebar price ----- */
+/* ----- Sidebar price (haze card) ----- */
 .detail-sidebar__price {
-  background: var(--color-ink);
-  color: #fff;
-  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: var(--radius-lg);
   padding: var(--space-5);
   margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-card);
 }
 .detail-sidebar__price-label {
   display: block;
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  color: var(--color-accent);
+  color: var(--color-muted-ink);
 }
 .detail-sidebar__price-value {
   display: block;
-  font-family: var(--font-display);
   font-size: var(--fs-2xl);
-  font-weight: 600;
+  font-weight: 700;
   margin-top: var(--space-2);
+  color: var(--color-ink);
 }
 
 .detail-sidebar__specs {
@@ -250,7 +255,8 @@
   color: var(--color-muted);
 }
 .detail-sidebar__spec dd {
-  font-weight: 600;
+  font-weight: 500;
+  color: var(--color-whiteout);
 }
 
 /* ----- Mobile sticky enquiry bar ----- */
@@ -262,10 +268,11 @@
   right: 0;
   bottom: 0;
   z-index: var(--z-header);
-  background: var(--color-bg);
+  background: rgba(6, 6, 6, 0.92);
+  backdrop-filter: blur(10px);
   border-top: 1px solid var(--color-border);
   padding: var(--space-3) var(--container-gutter);
-  box-shadow: 0 -4px 16px rgba(22, 34, 31, 0.08);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
 }
 .detail-stickybar .btn {
   flex: 1;
@@ -276,11 +283,11 @@
   }
 }
 
-/* ----- Project price banner ----- */
+/* ----- Project price banner (dark panel) ----- */
 .project-price {
-  background: var(--color-accent-soft);
-  border: 1px solid var(--color-accent);
-  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: var(--space-5);
   margin-bottom: var(--space-6);
   display: flex;
@@ -289,16 +296,15 @@
 }
 .project-price__label {
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  color: var(--color-accent-ink);
+  color: var(--color-signal);
 }
 .project-price__value {
-  font-family: var(--font-display);
   font-size: var(--fs-xl);
   font-weight: 600;
-  color: var(--color-ink);
+  color: var(--color-whiteout);
 }
 
 /* ----- Floor plans ----- */
@@ -309,13 +315,12 @@
 }
 .floorplan-item {
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--color-surface);
+  background: var(--color-surface-alt);
 }
 .floorplan-item img {
   width: 100%;
   height: auto;
   display: block;
 }
-

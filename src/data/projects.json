@@ -16,9 +16,21 @@
       "tenure": "Freehold",
       "completionDate": "Q4 2027",
       "projectStatus": "under-construction",
-      "unitTypes": ["1 Bedroom", "2 Bedrooms + Study", "3 Bedrooms", "Penthouse"],
+      "unitTypes": [
+        "1 Bedroom",
+        "2 Bedrooms + Study",
+        "3 Bedrooms",
+        "Penthouse"
+      ],
       "description": "Ardenia Towers is an ultra-luxury twin-tower condominium rising above the heart of Bukit Bintang. Designed around serene sky gardens and a residents' sky lounge, it sets a new benchmark for city-centre living with unobstructed views over the KL skyline.",
-      "facilities": ["Sky Garden", "Infinity Pool", "Gym & Yoga Studio", "Residents' Lounge", "24h Concierge", "Kid's Play Area"],
+      "facilities": [
+        "Sky Garden",
+        "Infinity Pool",
+        "Gym & Yoga Studio",
+        "Residents' Lounge",
+        "24h Concierge",
+        "Kid's Play Area"
+      ],
       "photos": [
         "/media/projects/ardenia-towers-bukit-bintang/cover.jpg",
         "/media/projects/ardenia-towers-bukit-bintang/tower.jpg",
@@ -46,9 +58,18 @@
       "tenure": "Freehold",
       "completionDate": "Completed",
       "projectStatus": "completed",
-      "unitTypes": ["Double Storey Link Villa", "Double Storey Semi-D"],
+      "unitTypes": [
+        "Double Storey Link Villa",
+        "Double Storey Semi-D"
+      ],
       "description": "Verde Villas is an established gated township of contemporary link villas and semi-detached homes, wrapped in landscaped greenery. It offers families a mature, secure community with parks, a clubhouse and easy access to the NKVE and Damansara-Puchong Expressway.",
-      "facilities": ["Clubhouse", "Gym", "Children's Playground", "Jogging Track", "24h Security"],
+      "facilities": [
+        "Clubhouse",
+        "Gym",
+        "Children's Playground",
+        "Jogging Track",
+        "24h Security"
+      ],
       "photos": [
         "/media/projects/verde-villas-damansara/cover.jpg",
         "/media/projects/verde-villas-damansara/street.jpg",
@@ -75,9 +96,18 @@
       "tenure": "Leasehold",
       "completionDate": "Q2 2026",
       "projectStatus": "new-launch",
-      "unitTypes": ["Shop Office", "Ground Floor Retail", "Office Floor"],
+      "unitTypes": [
+        "Shop Office",
+        "Ground Floor Retail",
+        "Office Floor"
+      ],
       "description": "Sapphire Square is a new boutique commercial development in the heart of USJ, offering highly sought-after three-storey and stratified shop offices. Positioned along a high-traffic corridor with excellent visibility and generous parking, it is designed for F&B, retail and professional offices.",
-      "facilities": ["Lift Access", "Onsite Parking", "High Ceiling", "Landscaped Podium"],
+      "facilities": [
+        "Lift Access",
+        "Onsite Parking",
+        "High Ceiling",
+        "Landscaped Podium"
+      ],
       "photos": [
         "/media/projects/sapphire-square-shop-lots/cover.jpg",
         "/media/projects/sapphire-square-shop-lots/facade.jpg"
@@ -103,9 +133,17 @@
       "tenure": "Leasehold",
       "completionDate": "Q1 2027",
       "projectStatus": "under-construction",
-      "unitTypes": ["Single Storey Link House", "Double Storey Link House"],
+      "unitTypes": [
+        "Single Storey Link House",
+        "Double Storey Link House"
+      ],
       "description": "Kajang East Garden Homes brings approachable, thoughtfully designed landed homes to the fast-growing Bandar Baru Bangi corridor. With parks woven through the township and easy access to the MRT Kajang line, it is well suited to first-time buyers and growing families.",
-      "facilities": ["Central Park", "Covered Car Porch", "Landscaped Streets", "MRT Proximity"],
+      "facilities": [
+        "Central Park",
+        "Covered Car Porch",
+        "Landscaped Streets",
+        "MRT Proximity"
+      ],
       "photos": [
         "/media/projects/kajang-east-garden-homes/cover.jpg",
         "/media/projects/kajang-east-garden-homes/display.jpg"
@@ -131,9 +169,18 @@
       "tenure": "Leasehold",
       "completionDate": "Q3 2026",
       "projectStatus": "under-construction",
-      "unitTypes": ["Semi-Detached Warehouse", "Detached Warehouse", "Built-To-Suit"],
+      "unitTypes": [
+        "Semi-Detached Warehouse",
+        "Detached Warehouse",
+        "Built-To-Suit"
+      ],
       "description": "Rawang Industrial Hub is a new purpose-built industrial development on the northern KL fringe, offering semi-detached and detached warehouses with clear span layouts and heavy-duty specifications. Strategically placed along the Latar Highway for fast access to the port and northern corridor.",
-      "facilities": ["High Clear Height", "Heavy-Duty Floor", "Dock & Ramp", "Guard House"],
+      "facilities": [
+        "High Clear Height",
+        "Heavy-Duty Floor",
+        "Dock & Ramp",
+        "Guard House"
+      ],
       "photos": [
         "/media/projects/rawang-industrial-hub/cover.jpg",
         "/media/projects/rawang-industrial-hub/interior.jpg"
@@ -159,9 +206,19 @@
       "tenure": "Freehold",
       "completionDate": "Q4 2025",
       "projectStatus": "completed",
-      "unitTypes": ["3 Bedrooms", "4 Bedrooms", "Duplex Penthouse"],
+      "unitTypes": [
+        "3 Bedrooms",
+        "4 Bedrooms",
+        "Duplex Penthouse"
+      ],
       "description": "Mont Kiara Residence is a serene, low-density condominium perched on a quiet ridge within the coveted Mont Kiara enclave. Completed to a premium standard, it combines spacious layouts, lush landscaped gardens and rooftop facilities with the township's renowned international schooling and dining.",
-      "facilities": ["Rooftop Pool", "Landscaped Gardens", "Gym", "BBQ Pavilion", "Multipurpose Hall"],
+      "facilities": [
+        "Rooftop Pool",
+        "Landscaped Gardens",
+        "Gym",
+        "BBQ Pavilion",
+        "Multipurpose Hall"
+      ],
       "photos": [
         "/media/projects/mont-kiara-residences/cover.jpg",
         "/media/projects/mont-kiara-residences/pool.jpg",

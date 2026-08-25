@@ -30,7 +30,7 @@ export function HomePage() {
         <div className="container hero__content">
           <span className="hero__eyebrow">Kuala Lumpur · Selangor</span>
           <h1 className="hero__title">
-            Find a home with confidence, <em>guided by expertise</em>.
+            Find a home with confidence — <em>guided</em> by expertise.
           </h1>
           <p className="hero__intro">
             I help you discover the right property — new launches, resale homes,
@@ -187,7 +187,7 @@ export function HomePage() {
               >
                 WhatsApp {profile.phone}
               </Button>
-              <Button to="/contact" variant="ghost" size="lg">
+              <Button to="/contact" variant="secondary" size="lg">
                 Contact Form
               </Button>
             </div>

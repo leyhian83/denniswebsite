@@ -64,8 +64,14 @@ export function Footer() {
         <span>
           © {new Date().getFullYear()} {SITE.name}. All rights reserved.
         </span>
-        <span className="footer__note">
-          Prototype site — sample data shown for demonstration only.
+        <span>
+          <span className="footer__note">
+            Prototype site — sample data shown for demonstration only.
+          </span>{" "}
+          ·{" "}
+          <Link to="/login" className="footer__admin">
+            Admin
+          </Link>
         </span>
       </div>
     </footer>

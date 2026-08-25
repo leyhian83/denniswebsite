@@ -1,4 +1,4 @@
-/* Layout, hero, page header, and shared page-section styles. */
+/* Layout, page header, and shared page-section styles. */
 
 .site-shell {
   min-height: 100vh;
@@ -10,8 +10,8 @@
 }
 
 /* ---------- Page header (interior pages) ---------- */
+/* Type-led on the dark canvas — Air keeps interior headers quiet. */
 .page-header {
-  background: var(--color-surface-alt);
   padding: var(--space-14) 0 var(--space-10);
   border-bottom: 1px solid var(--color-border);
 }
@@ -19,14 +19,17 @@
   margin-bottom: var(--space-3);
 }
 .page-header__title {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  line-height: var(--lh-tight);
+  font-size: clamp(2.2rem, 3.6vw + 0.5rem, 3.5rem);
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.05;
+  color: var(--color-whiteout);
 }
 .page-header__desc {
   margin-top: var(--space-4);
   max-width: 44rem;
-  color: var(--color-ink-soft);
+  color: var(--color-muted);
+  line-height: var(--lh-loose);
 }
 .breadcrumb {
   display: flex;
@@ -39,39 +42,37 @@
 }
 .breadcrumb a {
   color: var(--color-muted);
+  transition: color var(--duration-fast) var(--ease-standard);
 }
 .breadcrumb a:hover {
-  color: var(--color-ink);
+  color: var(--color-whiteout);
 }
 
 @media (min-width: 768px) {
   .page-header {
     padding: var(--space-16) 0 var(--space-12);
   }
-  .page-header__title {
-    font-size: var(--fs-3xl);
-  }
 }
 
 .page-header--slim {
   padding: var(--space-10) 0 var(--space-6);
-  background: var(--color-surface);
 }
 .page-header__location {
   display: flex;
   align-items: flex-start;
   gap: var(--space-2);
   margin-top: var(--space-4);
-  color: var(--color-ink-soft);
-  font-weight: 600;
+  color: var(--color-muted);
+  font-weight: 500;
 }
 .page-header__location svg {
   margin-top: 2px;
-  color: var(--color-accent-ink);
+  color: var(--color-signal);
   flex-shrink: 0;
 }
 
 /* ---------- Category nav chips (subsale / projects) ---------- */
+/* Pills allowed here — they are filter controls (Air rule). */
 .category-nav {
   display: flex;
   flex-wrap: wrap;
@@ -82,24 +83,24 @@
   padding: 0.6rem 1.1rem;
   border-radius: var(--radius-pill);
   border: 1px solid var(--color-border-strong);
-  background: var(--color-surface);
-  font-weight: 700;
+  background: var(--color-surface-alt);
+  font-weight: 500;
   font-size: var(--fs-sm);
-  color: var(--color-ink-soft);
+  color: var(--color-muted);
   transition: all var(--duration-fast) var(--ease-standard);
 }
 .category-nav__item:hover {
-  border-color: var(--color-ink);
-  color: var(--color-ink);
+  border-color: var(--color-whiteout);
+  color: var(--color-whiteout);
 }
 .category-nav__item.is-active {
-  background: var(--color-ink);
-  color: var(--color-bg);
-  border-color: var(--color-ink);
+  background: var(--color-whiteout);
+  color: var(--color-ink);
+  border-color: var(--color-whiteout);
 }
 .category-nav__item small {
-  font-weight: 600;
-  opacity: 0.75;
+  font-weight: 500;
+  opacity: 0.65;
   margin-left: 0.2rem;
 }
 
@@ -108,13 +109,14 @@
   text-align: center;
   padding: var(--space-14) var(--space-6);
   border: 1px dashed var(--color-border-strong);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   grid-column: 1 / -1;
 }
 .empty-state__title {
-  font-family: var(--font-display);
   font-size: var(--fs-lg);
+  font-weight: 600;
   margin-bottom: var(--space-2);
+  color: var(--color-whiteout);
 }
 .empty-state__text {
   color: var(--color-muted);

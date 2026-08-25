@@ -10,8 +10,9 @@
 @import "./detail.css";
 @import "./gallery.css";
 @import "./forms.css";
+@import "./admin.css";
 
-/* ---------- Media placeholder ---------- */
+/* ---------- Media placeholder (flat dark — Air avoids gradients) ---------- */
 .media-placeholder {
   width: 100%;
   height: 100%;
@@ -38,7 +39,8 @@
 }
 .section-head__desc {
   margin-top: var(--space-4);
-  color: var(--color-ink-soft);
+  color: var(--color-muted);
+  line-height: var(--lh-loose);
 }
 .section-head__action {
   white-space: nowrap;

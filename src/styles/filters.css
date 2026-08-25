@@ -16,24 +16,29 @@
 }
 .filter-group__label {
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   color: var(--color-muted);
 }
 
+/* Inputs are the haze layer above the dark canvas (Air). */
 .filter-group select {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
   background-color: var(--color-surface);
   color: var(--color-ink);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7773' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231b1b1b' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.7rem center;
   padding-right: 2rem;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.filter-group select:hover {
+  border-color: rgba(27, 27, 27, 0.25);
 }
 .filter-group select:focus-visible {
   outline: none;
@@ -54,14 +59,12 @@
 .btn--ghost-text {
   background: none;
   color: var(--color-muted);
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: 0;
+  font-weight: 500;
   padding: 0;
   justify-content: flex-start;
 }
 .btn--ghost-text:hover {
-  color: var(--color-ink);
+  color: var(--color-whiteout);
 }
 
 /* ----- Listing toolbar (search + sort + filters trigger) ----- */
@@ -77,12 +80,12 @@
   align-items: center;
   gap: var(--space-2);
   padding: 0.55rem 0.9rem;
-  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
   background: var(--color-surface);
+  color: var(--color-ink);
 }
 .listing-toolbar__search svg {
-  color: var(--color-muted);
+  color: var(--color-ink-soft);
   flex-shrink: 0;
 }
 .listing-toolbar__search input {
@@ -91,9 +94,10 @@
   width: 100%;
   background: transparent;
   font-size: var(--fs-base);
+  color: var(--color-ink);
 }
 .listing-toolbar__search input::placeholder {
-  color: var(--color-muted);
+  color: var(--color-muted-ink);
 }
 
 .listing-toolbar__right {
@@ -108,10 +112,10 @@
   align-items: center;
   gap: var(--space-2);
   padding: 0.6rem 1rem;
-  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
   background: var(--color-surface);
-  font-weight: 700;
+  color: var(--color-ink);
+  font-weight: 500;
 }
 .listing-toolbar__count {
   display: inline-flex;
@@ -120,17 +124,21 @@
   min-width: 1.25rem;
   height: 1.25rem;
   border-radius: var(--radius-pill);
-  background: var(--color-forest);
-  color: var(--color-forest-ink);
+  background: var(--color-whiteout);
+  color: var(--color-ink);
   font-size: var(--fs-xs);
+  font-weight: 700;
   padding-inline: 0.35rem;
 }
 
 .listing-toolbar__sort select {
   padding: 0.6rem 0.8rem;
-  border: 1px solid var(--color-border-strong);
+  border: none;
   border-radius: var(--radius-sm);
   background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 500;
+  cursor: pointer;
 }
 .listing-toolbar__count-text {
   grid-column: 1 / -1;
@@ -174,9 +182,9 @@
     position: sticky;
     top: calc(var(--header-height) + var(--space-6));
     padding: var(--space-6);
-    background: var(--color-surface);
+    background: var(--color-surface-alt);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
   }
 }
 
@@ -205,7 +213,9 @@
   inset: auto 0 0 0;
   max-height: 86vh;
   overflow-y: auto;
-  background: var(--color-bg);
+  background: var(--color-void);
+  border: 1px solid var(--color-border);
+  border-bottom: none;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: var(--space-5);
   transform: translateY(100%);
@@ -221,9 +231,9 @@
   margin-bottom: var(--space-5);
 }
 .filter-sheet__title {
-  font-family: var(--font-display);
   font-size: var(--fs-lg);
   font-weight: 600;
+  color: var(--color-whiteout);
 }
 .filter-sheet__close {
   display: inline-flex;
@@ -232,10 +242,10 @@
   width: 2.4rem;
   height: 2.4rem;
   border-radius: var(--radius-sm);
-  color: var(--color-ink);
+  color: var(--color-whiteout);
 }
 .filter-sheet__close:hover {
-  background: var(--color-surface-alt);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* Desktop toolbar: the "Filters" trigger is unnecessary (sidebar visible) */

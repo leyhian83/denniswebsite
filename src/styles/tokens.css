@@ -1,62 +1,74 @@
 /* ============================================================
-   DESIGN TOKENS — single source of truth for the property site
+   DESIGN TOKENS — single source of truth
+   "Air" design system (refero.design): dark atmospheric canvas,
+   full-bleed photography, compressed display type, quiet
+   medium-weight interface type. No gradients, no pill shapes
+   except filter/toggle controls, radius ladder 4/8/12.
    ============================================================ */
 
 :root {
   /* ----- Colours -------------------------------------------------
-     A warm neutral foundation (not cream/sand) + a deep ink navy,
-     with a single restrained accent used sparingly. Property
-     photography carries the visual weight. */
-  --color-ink: #16221f; /* near-black primary text */
-  --color-ink-soft: #3d4a46; /* secondary text */
-  --color-muted: #6b7773; /* tertiary / meta text */
-  --color-bg: #fbfaf8; /* page background — soft warm white */
-  --color-surface: #ffffff; /* cards, raised panels */
-  --color-surface-alt: #f1efea; /* subtle banding */
-  --color-border: #e4e1da; /* hairlines, dividers */
-  --color-border-strong: #cfcac2;
+     Air neutrals: Black Void / Ink / Haze / Whiteout.
+     Air accents: Twilight Blue (large headings on dark),
+     Signal Blue (links + tags only — never the primary CTA). */
+  --color-void: #000000; /* deepest layer — footer, nav hairlines */
+  --color-bg: #0a0a0a; /* page canvas */
+  --color-surface: #f5f5f5; /* haze — cards, panels, inputs on dark */
+  --color-surface-2: #ffffff; /* raised inputs on haze panels */
+  --color-surface-alt: #131313; /* subtle dark banding / panels */
+  --color-border: rgba(255, 255, 255, 0.14); /* hairlines on dark */
+  --color-border-strong: rgba(255, 255, 255, 0.3);
 
-  --color-accent: #a5793f; /* muted gold — used sparingly */
-  --color-accent-ink: #7c5a2c; /* accent text on light */
-  --color-accent-soft: #f0e7d8; /* accent tint backgrounds */
+  --color-ink: #1b1b1b; /* text + button borders on light surfaces */
+  --color-ink-soft: #4a4a4a; /* secondary text on light surfaces */
+  --color-muted-ink: #656565; /* tertiary text on light surfaces */
+  --color-whiteout: #ffffff; /* primary text on dark */
+  --color-muted: rgba(255, 255, 255, 0.64); /* secondary text on dark */
 
-  --color-forest: #1d4a3c; /* deep property-green for CTAs */
-  --color-forest-dark: #14372d;
-  --color-forest-ink: #e9f4ef;
+  --color-twilight: #426188; /* large heading accent on dark (Air) */
+  --color-signal: #2b7fff; /* links / tags on dark (Air) */
+  --color-signal-ink: #1a56c8; /* signal adjusted for haze (AA) */
 
-  --color-danger: #b3383a;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #1eb958;
+  --color-danger: #e5484d;
 
-  /* Status */
-  --color-status-available: #1d7a52;
-  --color-status-available-bg: #e4f3eb;
-  --color-status-reserved: #a5793f;
-  --color-status-reserved-bg: #f4eadb;
-  --color-status-sold: #6b7773;
-  --color-status-sold-bg: #ecebe8;
+  /* Status chips sit over photography: dark chip + tinted text */
+  --color-status-available: #34d399;
+  --color-status-available-bg: rgba(52, 211, 153, 0.16);
+  --color-status-reserved: #f5b544;
+  --color-status-reserved-bg: rgba(245, 181, 68, 0.18);
+  --color-status-sold: #9ca3af;
+  --color-status-sold-bg: rgba(156, 163, 175, 0.18);
 
   /* Overlays */
-  --color-overlay: rgba(15, 24, 21, 0.55);
-  --color-overlay-strong: rgba(12, 19, 17, 0.78);
+  --color-overlay: rgba(0, 0, 0, 0.6);
+  --color-overlay-strong: rgba(0, 0, 0, 0.88);
 
   /* ----- Typography ----------------------------------------------
-     Editorial serif display for headings, clean sans for body. */
-  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
-  --font-body: "Mulish", -apple-system, BlinkMacSystemFont, "Segoe UI",
+     Anton (compressed) for ultra-large display headlines ONLY,
+     always uppercase. Inter medium for interface quietness, with
+     400 for long-form. Caveat for cursive accent words inside
+     display headlines. */
+  --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
+  --font-accent: "Caveat", "Segoe Script", cursive;
 
   --fs-xs: 0.75rem;
-  --fs-sm: 0.875rem;
+  --fs-sm: 0.8125rem;
   --fs-base: 1rem;
   --fs-md: 1.125rem;
   --fs-lg: 1.375rem;
   --fs-xl: 1.75rem;
-  --fs-2xl: 2.25rem;
-  --fs-3xl: 3rem;
-  --fs-hero: clamp(2.5rem, 5vw + 1rem, 4.25rem);
+  --fs-2xl: 2rem;
+  --fs-3xl: 3.5rem;
+  --fs-hero: clamp(3rem, 7vw + 1rem, 7.5rem);
 
+  --lh-display: 0.92;
   --lh-tight: 1.12;
   --lh-base: 1.5;
-  --lh-loose: 1.7;
+  --lh-loose: 1.65;
 
   --tracking-tight: -0.02em;
   --tracking-wide: 0.06em;
@@ -80,18 +92,18 @@
   --container-narrow: 58rem;
   --container-gutter: clamp(1.25rem, 4vw, 2.5rem);
 
-  /* ----- Radius --------------------------------------------------- */
+  /* ----- Radius (Air ladder: 4 inputs / 8 buttons / 12 cards) ----- */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --radius-pill: 999px;
+  --radius-pill: 999px; /* ONLY toggle/filter controls */
 
-  /* ----- Shadows -------------------------------------------------- */
-  --shadow-sm: 0 1px 2px rgba(22, 34, 31, 0.06);
-  --shadow-md: 0 6px 18px rgba(22, 34, 31, 0.08);
-  --shadow-lg: 0 18px 40px rgba(22, 34, 31, 0.14);
-  --shadow-card: 0 2px 6px rgba(22, 34, 31, 0.05),
-    0 12px 30px rgba(22, 34, 31, 0.07);
+  /* ----- Shadows (light cards float above the dark canvas) -------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.55);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3),
+    0 16px 40px rgba(0, 0, 0, 0.5);
 
   /* ----- Image aspect ratios -------------------------------------- */
   --aspect-card: 4 / 3;
@@ -105,7 +117,7 @@
 
   /* ----- Layout --------------------------------------------------- */
   --header-height: 4.5rem;
-  --focus-ring: 0 0 0 3px rgba(165, 121, 63, 0.4);
+  --focus-ring: 0 0 0 3px rgba(43, 127, 255, 0.45);
   --z-header: 100;
   --z-mobile-menu: 200;
   --z-overlay: 300;
@@ -142,7 +154,7 @@ body {
   font-family: var(--font-body);
   font-size: var(--fs-base);
   line-height: var(--lh-base);
-  color: var(--color-ink);
+  color: var(--color-whiteout);
   background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -182,13 +194,15 @@ ol[role="list"] {
   padding: 0;
 }
 
+/* Interface headings are quiet medium-weight Inter; the compressed
+   Anton face is reserved for .u-display / .hero__title etc. */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 600;
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-tight);
@@ -219,24 +233,29 @@ h6 {
 .u-eyebrow {
   font-family: var(--font-body);
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
-  color: var(--color-accent-ink);
+  color: var(--color-signal);
+}
+
+/* Poster-scale compressed headline (Anton, uppercase). */
+.u-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-3xl);
+  line-height: var(--lh-display);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 
 .u-section-title {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-size: clamp(1.9rem, 2.4vw + 0.6rem, 2.75rem);
+  font-weight: 500;
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-tight);
-}
-
-@media (min-width: 768px) {
-  .u-section-title {
-    font-size: var(--fs-3xl);
-  }
+  color: var(--color-whiteout);
 }
 
 .u-muted {
@@ -282,4 +301,5 @@ h6 {
 
 .section--alt {
   background-color: var(--color-surface-alt);
+  border-block: 1px solid rgba(255, 255, 255, 0.06);
 }

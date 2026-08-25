@@ -1,4 +1,4 @@
-/* Contact form, enquiry card, forms */
+/* Contact form, enquiry card, forms — light haze panels on dark canvas. */
 
 .contact-form {
   display: flex;
@@ -23,23 +23,30 @@
 }
 .contact-form__field label {
   font-size: var(--fs-sm);
-  font-weight: 700;
+  font-weight: 600;
+  color: var(--color-ink-soft);
 }
+/* Raised white inputs on the haze panel. */
 .contact-form__field input,
 .contact-form__field textarea {
   padding: 0.7rem 0.9rem;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid rgba(27, 27, 27, 0.18);
   border-radius: var(--radius-sm);
-  background: var(--color-surface);
+  background: var(--color-surface-2);
+  color: var(--color-ink);
   font-size: var(--fs-base);
   transition: border-color var(--duration-fast) var(--ease-standard),
     box-shadow var(--duration-fast) var(--ease-standard);
 }
+.contact-form__field input::placeholder,
+.contact-form__field textarea::placeholder {
+  color: var(--color-muted-ink);
+}
 .contact-form__field input:focus-visible,
 .contact-form__field textarea:focus-visible {
   outline: none;
-  border-color: var(--color-accent);
-  box-shadow: var(--focus-ring);
+  border-color: var(--color-signal-ink);
+  box-shadow: 0 0 0 3px rgba(26, 86, 200, 0.22);
 }
 .contact-form__field input[aria-invalid="true"],
 .contact-form__field textarea[aria-invalid="true"] {
@@ -61,47 +68,48 @@
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-8);
-  background: var(--color-status-available-bg);
-  border: 1px solid #bfe0cd;
-  border-radius: var(--radius-md);
-  color: var(--color-ink);
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  border-radius: var(--radius-lg);
+  color: var(--color-whiteout);
 }
 .contact-form__success > svg {
   color: var(--color-status-available);
 }
 .contact-form__success-title {
-  font-family: var(--font-display);
   font-size: var(--fs-xl);
   font-weight: 600;
 }
 .contact-form__success-text {
-  color: var(--color-ink-soft);
+  color: var(--color-muted);
   max-width: 34rem;
 }
+.contact-form__success .btn--outline {
+  color: var(--color-whiteout);
+}
 
-/* ----- Enquiry card (detail pages) ----- */
+/* ----- Enquiry card (detail pages) — haze panel ----- */
 .enquiry-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  border-radius: var(--radius-lg);
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-card);
 }
 .enquiry-card__content {
   padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(27, 27, 27, 0.12);
 }
 .enquiry-card__title {
-  font-family: var(--font-display);
   font-size: var(--fs-lg);
   font-weight: 600;
 }
 .enquiry-card__agent {
   font-size: var(--fs-sm);
-  color: var(--color-muted);
+  color: var(--color-ink-soft);
 }
 .enquiry-card__actions {
   display: grid;
@@ -111,9 +119,25 @@
 .enquiry-card__whatsapp {
   grid-column: 1 / -1;
 }
+/* Light-panel button variants */
+.enquiry-card .btn--outline {
+  color: var(--color-ink);
+  border-color: rgba(27, 27, 27, 0.35);
+}
+.enquiry-card .btn--outline:hover {
+  border-color: var(--color-ink);
+  background: rgba(27, 27, 27, 0.05);
+}
+.enquiry-card .btn--primary {
+  background: var(--color-ink);
+  color: var(--color-whiteout);
+}
+.enquiry-card .btn--primary:hover {
+  background: #000000;
+}
 .enquiry-card__note {
   font-size: var(--fs-sm);
-  color: var(--color-muted);
+  color: var(--color-ink-soft);
 }
 
 /* On tablet/mobile detail pages make the CTA sticky at the bottom. */

@@ -1,4 +1,4 @@
-/* Project (new development) card */
+/* Project (new development) card — haze surface on the dark canvas. */
 .project-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -17,18 +17,18 @@
 
 .project-card {
   background: var(--color-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-card);
   transition:
     transform var(--duration-base) var(--ease-out),
     box-shadow var(--duration-base) var(--ease-out);
 }
 .project-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-lg);
 }
 
 .project-card__media {
@@ -52,14 +52,16 @@
   position: absolute;
   top: var(--space-3);
   left: var(--space-3);
-  background: var(--color-ink);
-  color: var(--color-accent-soft);
-  padding: 0.25rem 0.7rem;
+  background: rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(2px);
+  color: var(--color-whiteout);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.3rem 0.7rem;
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
 }
 
 .project-card__body {
@@ -74,32 +76,33 @@
   display: flex;
   gap: var(--space-2);
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
-  color: var(--color-accent-ink);
+  color: var(--color-signal-ink);
 }
 .project-card__dot {
-  color: var(--color-border-strong);
+  color: var(--color-muted-ink);
 }
 
 .project-card__title {
-  font-family: var(--font-display);
   font-size: var(--fs-lg);
   font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
 }
 .project-card__title a:hover {
-  color: var(--color-accent-ink);
+  color: var(--color-signal-ink);
 }
 
 .project-card__developer {
   font-size: var(--fs-sm);
-  color: var(--color-muted);
+  color: var(--color-ink-soft);
 }
 
 .project-card__price {
   font-size: var(--fs-md);
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-ink);
 }
 
@@ -108,12 +111,12 @@
   align-items: flex-start;
   gap: var(--space-2);
   font-size: var(--fs-sm);
-  color: var(--color-muted);
+  color: var(--color-ink-soft);
   margin-bottom: var(--space-2);
 }
 .project-card__location svg {
   margin-top: 2px;
-  color: var(--color-accent-ink);
+  color: var(--color-signal-ink);
 }
 
 .project-card__link {
@@ -121,10 +124,10 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--fs-sm);
-  color: var(--color-forest);
+  color: var(--color-signal-ink);
 }
 .project-card:hover .project-card__link {
-  color: var(--color-forest-dark);
+  color: #10397e;
 }
