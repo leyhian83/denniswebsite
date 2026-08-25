@@ -1,0 +1,91 @@
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-sm);
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+  white-space: nowrap;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--sm {
+  padding: 0.45rem 0.9rem;
+  font-size: var(--fs-xs);
+}
+.btn--md {
+  padding: 0.7rem 1.35rem;
+}
+.btn--lg {
+  padding: 0.95rem 1.9rem;
+  font-size: var(--fs-base);
+}
+
+.btn__icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Primary — deep property green */
+.btn--primary {
+  background-color: var(--color-forest);
+  color: var(--color-forest-ink);
+}
+.btn--primary:hover {
+  background-color: var(--color-forest-dark);
+  box-shadow: var(--shadow-md);
+}
+
+/* Secondary — dark ink */
+.btn--secondary {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+}
+.btn--secondary:hover {
+  background-color: var(--color-ink-soft);
+}
+
+/* Outline */
+.btn--outline {
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-border-strong);
+}
+.btn--outline:hover {
+  border-color: var(--color-ink);
+  background: var(--color-surface);
+}
+
+/* Ghost (on dark overlays) */
+.btn--ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(2px);
+}
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* WhatsApp */
+.btn--whatsapp {
+  background-color: #25d366;
+  color: #ffffff;
+}
+.btn--whatsapp:hover {
+  background-color: #1eb958;
+  box-shadow: var(--shadow-md);
+}

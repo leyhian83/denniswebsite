@@ -1,0 +1,321 @@
+/* Property / project detail pages. */
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+.detail-sidebar {
+  order: -1;
+}
+@media (min-width: 1024px) {
+  .detail-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    align-items: start;
+  }
+  .detail-sidebar {
+    order: 0;
+  }
+  .detail-sidebar__sticky {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-6));
+  }
+}
+
+/* ----- Media tabs (Photos / Video) ----- */
+.detail-tabs {
+  display: inline-flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+.detail-tab {
+  padding: 0.6rem 1.1rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+.detail-tab:hover {
+  color: var(--color-ink);
+}
+.detail-tab.is-active {
+  color: var(--color-ink);
+  border-bottom-color: var(--color-accent);
+}
+
+.detail-video {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.detail-video__frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-ink);
+}
+.detail-video__frame--local {
+  display: block;
+}
+
+/* ----- Price (mobile-only prominent) ----- */
+.detail-price-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-block: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+.detail-price-mobile__label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-muted);
+}
+.detail-price-mobile__value {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+}
+@media (min-width: 1024px) {
+  .detail-price-mobile {
+    display: none;
+  }
+}
+
+/* ----- Sections ----- */
+.detail-main {
+  min-width: 0;
+}
+.detail-section {
+  padding-block: var(--space-8);
+  border-bottom: 1px solid var(--color-border);
+}
+.detail-section:last-child {
+  border-bottom: none;
+}
+.detail-section__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-5);
+}
+
+/* Specs grid */
+.detail-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+@media (min-width: 768px) {
+  .detail-specs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.detail-spec {
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.detail-spec__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-muted);
+}
+.detail-spec__label svg {
+  color: var(--color-accent-ink);
+  flex-shrink: 0;
+}
+.detail-spec__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* Description */
+.detail-description {
+  color: var(--color-ink-soft);
+  line-height: var(--lh-loose);
+  max-width: 58ch;
+}
+
+/* Key features */
+.detail-features {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+@media (min-width: 640px) {
+  .detail-features {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.detail-feature {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+}
+.detail-feature svg {
+  color: var(--color-status-available);
+  flex-shrink: 0;
+}
+
+/* Location */
+.detail-location {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+@media (min-width: 640px) {
+  .detail-location {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-8);
+  }
+}
+.detail-location__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+.detail-location__row dt {
+  color: var(--color-muted);
+  font-weight: 600;
+}
+.detail-location__row dd {
+  text-align: right;
+  font-weight: 600;
+}
+.detail-location__note {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+
+/* ----- Sidebar price ----- */
+.detail-sidebar__price {
+  background: var(--color-ink);
+  color: #fff;
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+.detail-sidebar__price-label {
+  display: block;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent);
+}
+.detail-sidebar__price-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  margin-top: var(--space-2);
+}
+
+.detail-sidebar__specs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.detail-sidebar__spec {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--fs-sm);
+}
+.detail-sidebar__spec dt {
+  color: var(--color-muted);
+}
+.detail-sidebar__spec dd {
+  font-weight: 600;
+}
+
+/* ----- Mobile sticky enquiry bar ----- */
+.detail-stickybar {
+  display: flex;
+  gap: var(--space-3);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-header);
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-3) var(--container-gutter);
+  box-shadow: 0 -4px 16px rgba(22, 34, 31, 0.08);
+}
+.detail-stickybar .btn {
+  flex: 1;
+}
+@media (min-width: 1024px) {
+  .detail-stickybar {
+    display: none;
+  }
+}
+
+/* ----- Project price banner ----- */
+.project-price {
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.project-price__label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent-ink);
+}
+.project-price__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* ----- Floor plans ----- */
+.floorplan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+.floorplan-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+.floorplan-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+

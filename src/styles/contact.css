@@ -1,0 +1,144 @@
+/* Contact form, enquiry card, forms */
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+@media (min-width: 640px) {
+  .contact-form__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.contact-form__field label {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.contact-form__field input,
+.contact-form__field textarea {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: var(--fs-base);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+.contact-form__field input:focus-visible,
+.contact-form__field textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: var(--focus-ring);
+}
+.contact-form__field input[aria-invalid="true"],
+.contact-form__field textarea[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+.contact-form__field textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.contact-form__error {
+  font-size: var(--fs-sm);
+  color: var(--color-danger);
+}
+
+.contact-form__success {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  background: var(--color-status-available-bg);
+  border: 1px solid #bfe0cd;
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+}
+.contact-form__success > svg {
+  color: var(--color-status-available);
+}
+.contact-form__success-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+}
+.contact-form__success-text {
+  color: var(--color-ink-soft);
+  max-width: 34rem;
+}
+
+/* ----- Enquiry card (detail pages) ----- */
+.enquiry-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+.enquiry-card__content {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+.enquiry-card__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+.enquiry-card__agent {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.enquiry-card__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.enquiry-card__whatsapp {
+  grid-column: 1 / -1;
+}
+.enquiry-card__note {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+
+/* On tablet/mobile detail pages make the CTA sticky at the bottom. */
+@media (max-width: 1023px) {
+  .enquiry-card--sticky {
+    position: fixed;
+    left: var(--container-gutter);
+    right: var(--container-gutter);
+    bottom: var(--space-4);
+    z-index: var(--z-header);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    box-shadow: var(--shadow-lg);
+  }
+  .enquiry-card--sticky .enquiry-card__title,
+  .enquiry-card--sticky .enquiry-card__agent,
+  .enquiry-card--sticky .enquiry-card__note {
+    display: none;
+  }
+  .enquiry-card--sticky .enquiry-card__actions {
+    grid-template-columns: 1fr 1fr;
+    flex: 1;
+  }
+}

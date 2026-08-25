@@ -1,0 +1,52 @@
+/* Shared component styles: buttons, cards, images, section headers. */
+@import "./layout.css";
+@import "./pages.css";
+@import "./buttons.css";
+@import "./property-card.css";
+@import "./project-card.css";
+@import "./navigation.css";
+@import "./filters.css";
+@import "./contact.css";
+@import "./detail.css";
+@import "./gallery.css";
+@import "./forms.css";
+
+/* ---------- Media placeholder ---------- */
+.media-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-surface-alt);
+  overflow: hidden;
+}
+.media-placeholder svg {
+  display: block;
+}
+
+/* ---------- Section header row ---------- */
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+.section-head__eyebrow {
+  margin-bottom: var(--space-3);
+}
+.section-head__body {
+  max-width: 40rem;
+}
+.section-head__desc {
+  margin-top: var(--space-4);
+  color: var(--color-ink-soft);
+}
+.section-head__action {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

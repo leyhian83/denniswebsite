@@ -1,0 +1,17 @@
+{
+  "name": "Adam Firdaus",
+  "professionalTitle": "Senior Property Consultant · REN 12345-A",
+  "shortBio": "Trusted property consultant specialising in residential and investment properties across Kuala Lumpur and Selangor.",
+  "longBio": "With over a decade of experience in the Malaysian property market, I help buyers, sellers and investors find the right property with clarity and confidence. From first-time homes in Subang Jaya to premium condominiums in Mont Kiara, I provide honest guidance, thorough market insight and a personal service from viewing to key handover.",
+  "phone": "+6012-345 6789",
+  "whatsappNumber": "60123456789",
+  "email": "adam@leyhiproperties.my",
+  "profilePhoto": "/media/profile/avatar.jpg",
+  "company": "Leyhi Properties",
+  "renNumber": "REN 12345-A",
+  "socials": [
+    { "label": "Facebook", "url": "https://facebook.com" },
+    { "label": "Instagram", "url": "https://instagram.com" },
+    { "label": "LinkedIn", "url": "https://linkedin.com" }
+  ]
+}

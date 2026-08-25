@@ -1,0 +1,108 @@
+{
+  "states": [
+    {
+      "state": "Kuala Lumpur",
+      "slug": "kuala-lumpur",
+      "blurb": "Malaysia's capital — vibrant, well-connected and home to some of the country's most sought-after residential addresses.",
+      "areas": [
+        {
+          "name": "KLCC",
+          "slug": "klcc",
+          "description": "The city's iconic central business district, framed by the Petronas Twin Towers. Premium high-rise living with unrivalled skyline views and world-class amenities."
+        },
+        {
+          "name": "Mont Kiara",
+          "slug": "mont-kiara",
+          "description": "An established upmarket township popular with expatriates and families, known for its guarded condominiums, international schools and leafy streets."
+        },
+        {
+          "name": "Ampang",
+          "slug": "ampang",
+          "description": "A well-located residential district east of the city centre offering a mix of landed homes and condominiums close to the KLCC fringe."
+        },
+        {
+          "name": "Taman Tun Dr Ismail (TTDI)",
+          "slug": "taman-tun-dr-ismail",
+          "description": "A greenery-rich, family-friendly neighbourhood combining mature landed homes with modern developments, cafes and parks."
+        },
+        {
+          "name": "Cheras",
+          "slug": "cheras",
+          "description": "One of the largest and most livable residential areas in Kuala Lumpur, offering affordable to mid-range condominiums and landed homes."
+        },
+        {
+          "name": "Setapak",
+          "slug": "setapak",
+          "description": "A lively and affordable area in northeast KL, popular with young professionals and students, with strong public transport links."
+        },
+        {
+          "name": "Damansara",
+          "slug": "damansara",
+          "description": "A collection of prime, mature neighbourhoods west of the city known for landed homes, schools and established communities."
+        }
+      ]
+    },
+    {
+      "state": "Selangor",
+      "slug": "selangor",
+      "description": "Malaysia's most developed state, surrounding Kuala Lumpur with a diverse range of townships from affordable to premium.",
+      "areas": [
+        {
+          "name": "Petaling Jaya",
+          "slug": "petaling-jaya",
+          "description": "A mature, well-planned satellite city offering strong connectivity, established amenities and a broad range of property options."
+        },
+        {
+          "name": "Cheras",
+          "slug": "cheras",
+          "description": "The Selangor portion of Cheras extends the KL suburb seamlessly, with popular condominiums and landed estates."
+        },
+        {
+          "name": "Rawang",
+          "slug": "rawang",
+          "description": "An emerging township north of KL offering affordable landed homes and growing infrastructure."
+        },
+        {
+          "name": "Shah Alam",
+          "slug": "shah-alam",
+          "description": "The state capital of Selangor — a planned, family-oriented city with excellent schools, parkland and quality developments."
+        },
+        {
+          "name": "Subang Jaya / Sunway",
+          "slug": "subang-jaya-sunway",
+          "description": "A thriving, well-connected hub with vibrant commercial areas, excellent transport and a strong choice of condominiums and houses."
+        },
+        {
+          "name": "Klang",
+          "slug": "klang",
+          "description": "A historic royal town with a growing property scene, offering some of the most affordable landed homes near KL."
+        },
+        {
+          "name": "Puchong",
+          "slug": "puchong",
+          "description": "A fast-developing township with great highways access, wide variety of properties and strong community living."
+        },
+        {
+          "name": "Kuala Selangor",
+          "slug": "kuala-selangor",
+          "description": "A coastal district north of KL known for its natural attractions and quiet landed living at approachable prices."
+        },
+        {
+          "name": "Sungai Buloh",
+          "slug": "sungai-buloh",
+          "description": "A strategic township experiencing rapid growth with the new MRT, offering modern condominiums and landed homes."
+        },
+        {
+          "name": "Kajang",
+          "slug": "kajang",
+          "description": "A major satellite town southeast of KL with the developing Bandar Baru Kajang hub and excellent rail connectivity."
+        },
+        {
+          "name": "Damansara",
+          "slug": "damansara",
+          "description": "The Selangor side of Damansara encompasses prime townships such as Damansara Perdana, Utama and Damansara Damai."
+        }
+      ]
+    }
+  ]
+}

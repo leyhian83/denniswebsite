@@ -1,0 +1,285 @@
+/* ============================================================
+   DESIGN TOKENS — single source of truth for the property site
+   ============================================================ */
+
+:root {
+  /* ----- Colours -------------------------------------------------
+     A warm neutral foundation (not cream/sand) + a deep ink navy,
+     with a single restrained accent used sparingly. Property
+     photography carries the visual weight. */
+  --color-ink: #16221f; /* near-black primary text */
+  --color-ink-soft: #3d4a46; /* secondary text */
+  --color-muted: #6b7773; /* tertiary / meta text */
+  --color-bg: #fbfaf8; /* page background — soft warm white */
+  --color-surface: #ffffff; /* cards, raised panels */
+  --color-surface-alt: #f1efea; /* subtle banding */
+  --color-border: #e4e1da; /* hairlines, dividers */
+  --color-border-strong: #cfcac2;
+
+  --color-accent: #a5793f; /* muted gold — used sparingly */
+  --color-accent-ink: #7c5a2c; /* accent text on light */
+  --color-accent-soft: #f0e7d8; /* accent tint backgrounds */
+
+  --color-forest: #1d4a3c; /* deep property-green for CTAs */
+  --color-forest-dark: #14372d;
+  --color-forest-ink: #e9f4ef;
+
+  --color-danger: #b3383a;
+
+  /* Status */
+  --color-status-available: #1d7a52;
+  --color-status-available-bg: #e4f3eb;
+  --color-status-reserved: #a5793f;
+  --color-status-reserved-bg: #f4eadb;
+  --color-status-sold: #6b7773;
+  --color-status-sold-bg: #ecebe8;
+
+  /* Overlays */
+  --color-overlay: rgba(15, 24, 21, 0.55);
+  --color-overlay-strong: rgba(12, 19, 17, 0.78);
+
+  /* ----- Typography ----------------------------------------------
+     Editorial serif display for headings, clean sans for body. */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Mulish", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+  --fs-3xl: 3rem;
+  --fs-hero: clamp(2.5rem, 5vw + 1rem, 4.25rem);
+
+  --lh-tight: 1.12;
+  --lh-base: 1.5;
+  --lh-loose: 1.7;
+
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.06em;
+  --tracking-caps: 0.14em;
+
+  /* ----- Spacing scale (base unit 4px) --------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 2.5rem;
+  --space-10: 3rem;
+  --space-14: 4rem;
+  --space-16: 5rem;
+  --space-20: 6rem;
+
+  /* ----- Container widths ---------------------------------------- */
+  --container-max: 76rem; /* 1216px */
+  --container-narrow: 58rem;
+  --container-gutter: clamp(1.25rem, 4vw, 2.5rem);
+
+  /* ----- Radius --------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* ----- Shadows -------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(22, 34, 31, 0.06);
+  --shadow-md: 0 6px 18px rgba(22, 34, 31, 0.08);
+  --shadow-lg: 0 18px 40px rgba(22, 34, 31, 0.14);
+  --shadow-card: 0 2px 6px rgba(22, 34, 31, 0.05),
+    0 12px 30px rgba(22, 34, 31, 0.07);
+
+  /* ----- Image aspect ratios -------------------------------------- */
+  --aspect-card: 4 / 3;
+  --aspect-hero: 16 / 9;
+
+  /* ----- Motion / easing ------------------------------------------ */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 160ms;
+  --duration-base: 240ms;
+
+  /* ----- Layout --------------------------------------------------- */
+  --header-height: 4.5rem;
+  --focus-ring: 0 0 0 3px rgba(165, 121, 63, 0.4);
+  --z-header: 100;
+  --z-mobile-menu: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+
+  /* ----- Breakpoints (used in media queries) ---------------------- */
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+}
+
+/* ============================================================
+   BASE RESET
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img,
+picture,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+
+.u-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
+}
+
+.u-section-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+@media (min-width: 768px) {
+  .u-section-title {
+    font-size: var(--fs-3xl);
+  }
+}
+
+.u-muted {
+  color: var(--color-muted);
+}
+
+.u-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   LAYOUT PRIMITIVES
+   ============================================================ */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-gutter);
+}
+
+.container--narrow {
+  max-width: var(--container-narrow);
+}
+
+.section {
+  padding-block: var(--space-14);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: var(--space-20);
+  }
+}
+
+.section--alt {
+  background-color: var(--color-surface-alt);
+}
