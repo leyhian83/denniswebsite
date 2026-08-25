@@ -13,10 +13,10 @@ export function AboutPage() {
   });
 
   const stats = [
-    { value: "10+", label: "Years in property" },
-    { value: "200+", label: "Happy clients" },
-    { value: "RM 150M+", label: "Sales through my desk" },
-    { value: "KL & Selangor", label: "Areas covered" },
+    { value: "KLCC", label: "Prime project focus" },
+    { value: "Setia Alam", label: "Core market" },
+    { value: "Setia Eco Park", label: "Core market" },
+    { value: "REN 13482", label: "Registered negotiator" },
   ];
 
   return (
@@ -54,7 +54,7 @@ export function AboutPage() {
 
             <ul className="about-page__stats" role="list">
               {stats.map((s) => (
-                <li key={s.label} className="about-page__stat">
+                <li key={`${s.value}-${s.label}`} className="about-page__stat">
                   <strong>{s.value}</strong>
                   <span>{s.label}</span>
                 </li>

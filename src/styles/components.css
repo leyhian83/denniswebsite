@@ -19,8 +19,22 @@
   background-color: var(--color-surface-alt);
   overflow: hidden;
 }
+.media-placeholder__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.76;
+  filter: saturate(0.7) contrast(1.08);
+}
 .media-placeholder svg {
   display: block;
+}
+
+.flaticon-icon {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
 }
 
 /* ---------- Section header row ---------- */

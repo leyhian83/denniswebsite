@@ -18,6 +18,12 @@ import {
   type ProjectStatus,
 } from "../types/project";
 import type { VideoSource } from "../types/property";
+import {
+  MALAYSIA_AREAS,
+  MALAYSIA_PROPERTY_TYPES,
+  MALAYSIA_SUBAREAS,
+  MALAYSIA_STATES,
+} from "../data/malaysiaLocations";
 
 type FormValues = {
   name: string;
@@ -93,13 +99,30 @@ export function AddProjectPage() {
 
   // Folder slug used for uploads is derived from the current project name.
   const uploadSlug = slugify(values.name);
+  const areaOptions = values.state
+    ? MALAYSIA_AREAS[values.state] ?? []
+    : Array.from(new Set(Object.values(MALAYSIA_AREAS).flat())).sort();
+  const propertyTypeOptions = values.category
+    ? MALAYSIA_PROPERTY_TYPES[values.category] ?? []
+    : Array.from(new Set(Object.values(MALAYSIA_PROPERTY_TYPES).flat())).sort();
+  const subAreaOptions = values.area ? MALAYSIA_SUBAREAS[values.area] ?? [] : [];
 
   const set = (key: keyof FormValues) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const value =
       e.target.type === "checkbox" ? (e.target as HTMLInputElement).checked : e.target.value;
-    setValues((v) => ({ ...v, [key]: value }));
+    setValues((v) => {
+      const next = { ...v, [key]: value };
+      if (key === "state" && value !== v.state) {
+        next.area = "";
+        next.subArea = "";
+      }
+      if (key === "area" && value !== v.area) {
+        next.subArea = "";
+      }
+      return next;
+    });
     if (errors[key]) setErrors((err) => ({ ...err, [key]: undefined }));
     if (result && !result.ok) setResult(null);
   };
@@ -309,8 +332,16 @@ export function AddProjectPage() {
                   type="text"
                   value={values.propertyType}
                   onChange={set("propertyType")}
-                  placeholder="e.g. condominium, shop-lot"
+                  list="ap-property-type-options"
+                  aria-autocomplete="list"
+                  placeholder="Choose or type a property type"
                 />
+                <datalist id="ap-property-type-options">
+                  {propertyTypeOptions.map((propertyType) => (
+                    <option key={propertyType} value={propertyType} />
+                  ))}
+                </datalist>
+                <span className="admin-form__hint">Options update when you choose a category. Custom values are allowed.</span>
               </div>
 
               <div className="admin-form__field">
@@ -320,9 +351,18 @@ export function AddProjectPage() {
                   type="text"
                   value={values.state}
                   onChange={set("state")}
-                  placeholder="e.g. Selangor"
+                  list="ap-state-options"
+                  autoComplete="address-level1"
+                  aria-autocomplete="list"
+                  placeholder="Choose or type a Malaysian state"
                   aria-invalid={Boolean(errors.state)}
                 />
+                <datalist id="ap-state-options">
+                  {MALAYSIA_STATES.map((state) => (
+                    <option key={state} value={state} />
+                  ))}
+                </datalist>
+                <span className="admin-form__hint">All states and federal territories are available. You can also type a custom value.</span>
                 {errors.state && <span className="admin-form__error">{errors.state}</span>}
               </div>
 
@@ -333,9 +373,24 @@ export function AddProjectPage() {
                   type="text"
                   value={values.area}
                   onChange={set("area")}
-                  placeholder="e.g. Petaling Jaya"
+                  list="ap-area-options"
+                  autoComplete="address-level2"
+                  aria-autocomplete="list"
+                  placeholder={values.state ? "Choose or type an area" : "Choose a state first"}
                   aria-invalid={Boolean(errors.area)}
                 />
+                <datalist id="ap-area-options">
+                  {areaOptions.map((area) => (
+                    <option key={area} value={area} />
+                  ))}
+                </datalist>
+                <span className="admin-form__hint">
+                  {values.state
+                    ? areaOptions.length
+                      ? "Choose from the curated list or type a custom area."
+                      : "No curated areas for this state yet — type the area manually."
+                    : "Select a state to see curated area suggestions."}
+                </span>
                 {errors.area && <span className="admin-form__error">{errors.area}</span>}
               </div>
 
@@ -346,8 +401,23 @@ export function AddProjectPage() {
                   type="text"
                   value={values.subArea}
                   onChange={set("subArea")}
-                  placeholder="e.g. Damansara Perdana"
+                  list="ap-subarea-options"
+                  autoComplete="address-line2"
+                  aria-autocomplete="list"
+                  placeholder={values.area ? "Choose or type a sub-area" : "Choose an area first"}
                 />
+                <datalist id="ap-subarea-options">
+                  {subAreaOptions.map((subArea) => (
+                    <option key={subArea} value={subArea} />
+                  ))}
+                </datalist>
+                <span className="admin-form__hint">
+                  {values.area
+                    ? subAreaOptions.length
+                      ? "Choose from the curated neighbourhood list or type a custom sub-area."
+                      : "No curated sub-areas for this area yet — type one manually."
+                    : "Select an area to see curated sub-area suggestions."}
+                </span>
               </div>
 
               <div className="admin-form__field admin-form__field--wide">

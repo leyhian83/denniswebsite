@@ -6,6 +6,7 @@ export interface FiltersValue {
   residentialType?: "condominium" | "landed";
   state?: string;
   area?: string;
+  subArea?: string;
   minPrice?: number;
   maxPrice?: number;
   bedrooms?: number;

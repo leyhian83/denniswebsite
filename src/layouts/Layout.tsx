@@ -14,8 +14,11 @@ export function Layout() {
 
   return (
     <div className="site-shell">
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
       <Header />
-      <main className="site-main">
+      <main id="main-content" className="site-main">
         <Outlet />
       </main>
       <Footer />

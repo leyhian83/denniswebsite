@@ -5,6 +5,13 @@ import { getProjectsByCategory, getAllProjects } from "../services/projectServic
 import { PROJECT_CATEGORY_LABELS } from "../types/project";
 import type { ProjectCategory } from "../types";
 
+const RESIDENTIAL_PROJECT_TYPES = {
+  condominium: "Condominium",
+  landed: "Landed",
+} as const;
+
+type ResidentialProjectType = keyof typeof RESIDENTIAL_PROJECT_TYPES;
+
 export function ProjectsPage() {
   // Category is a static route segment (/projects/residential etc.), so
   // derive it from the current pathname.
@@ -14,13 +21,24 @@ export function ProjectsPage() {
     segment === "residential" || segment === "commercial" || segment === "industrial"
       ? (segment as ProjectCategory)
       : undefined;
+  const subtypeSegment = pathname.split("/")[3] ?? "";
+  const activeSubtype =
+    activeCategory === "residential" && subtypeSegment in RESIDENTIAL_PROJECT_TYPES
+      ? (subtypeSegment as ResidentialProjectType)
+      : undefined;
 
   usePageMeta({
-    title: activeCategory ? `${PROJECT_CATEGORY_LABELS[activeCategory]} Projects` : "New Projects",
+    title: activeSubtype
+      ? `${RESIDENTIAL_PROJECT_TYPES[activeSubtype]} Projects`
+      : activeCategory
+        ? `${PROJECT_CATEGORY_LABELS[activeCategory]} Projects`
+        : "New Projects",
     description: "Browse upcoming and current new property developments across Kuala Lumpur and Selangor.",
   });
 
-  const projects = activeCategory ? getProjectsByCategory(activeCategory) : getAllProjects();
+  const projects = activeCategory
+    ? getProjectsByCategory(activeCategory, activeSubtype)
+    : getAllProjects();
 
   return (
     <>
@@ -33,7 +51,15 @@ export function ProjectsPage() {
             {activeCategory && (
               <>
                 <span aria-hidden="true">/</span>
-                <span aria-current="page">{PROJECT_CATEGORY_LABELS[activeCategory]}</span>
+                <span aria-current={!activeSubtype ? "page" : undefined}>
+                  {PROJECT_CATEGORY_LABELS[activeCategory]}
+                </span>
+                {activeSubtype && (
+                  <>
+                    <span aria-hidden="true">/</span>
+                    <span aria-current="page">{RESIDENTIAL_PROJECT_TYPES[activeSubtype]}</span>
+                  </>
+                )}
               </>
             )}
           </nav>
@@ -63,6 +89,26 @@ export function ProjectsPage() {
               </Link>
             ))}
           </nav>
+
+          {activeCategory === "residential" && (
+            <nav className="category-nav" aria-label="Residential project types">
+              <Link
+                to="/projects/residential"
+                className={`category-nav__item ${!activeSubtype ? "is-active" : ""}`}
+              >
+                Residential · All
+              </Link>
+              {(Object.keys(RESIDENTIAL_PROJECT_TYPES) as ResidentialProjectType[]).map((type) => (
+                <Link
+                  key={type}
+                  to={`/projects/residential/${type}`}
+                  className={`category-nav__item ${activeSubtype === type ? "is-active" : ""}`}
+                >
+                  {RESIDENTIAL_PROJECT_TYPES[type]}
+                </Link>
+              ))}
+            </nav>
+          )}
 
           {projects.length > 0 ? (
             <div className="project-grid">

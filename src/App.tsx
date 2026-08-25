@@ -43,6 +43,7 @@ export default function App() {
           {/* Projects */}
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/residential" element={<ProjectsPage />} />
+          <Route path="projects/residential/:projectType" element={<ProjectsPage />} />
           <Route path="projects/commercial" element={<ProjectsPage />} />
           <Route path="projects/industrial" element={<ProjectsPage />} />
           <Route path="projects/:slug" element={<ProjectDetailPage />} />

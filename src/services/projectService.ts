@@ -116,8 +116,10 @@ export function getAllProjects(): Project[] {
   return ALL;
 }
 
-export function getProjectsByCategory(category: ProjectCategory): Project[] {
-  return ALL.filter((p) => p.category === category);
+export function getProjectsByCategory(category: ProjectCategory, propertyType?: string): Project[] {
+  return ALL.filter(
+    (p) => p.category === category && (!propertyType || p.propertyType === propertyType),
+  );
 }
 
 export function getFeaturedProjects(limit?: number): Project[] {

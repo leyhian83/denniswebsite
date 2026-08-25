@@ -57,6 +57,9 @@ export function Footer() {
               </a>
             </li>
           </ul>
+          <Link to="/login" className="btn btn--outline btn--sm footer__admin-button">
+            Admin
+          </Link>
         </div>
       </div>
 
@@ -67,11 +70,7 @@ export function Footer() {
         <span>
           <span className="footer__note">
             Prototype site — sample data shown for demonstration only.
-          </span>{" "}
-          ·{" "}
-          <Link to="/login" className="footer__admin">
-            Admin
-          </Link>
+          </span>
         </span>
       </div>
     </footer>

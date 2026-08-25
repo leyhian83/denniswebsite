@@ -17,6 +17,7 @@ function countActive(f: FiltersValue): number {
   if (f.residentialType) n++;
   if (f.state) n++;
   if (f.area) n++;
+  if (f.subArea) n++;
   if (f.minPrice != null && f.maxPrice != null) n++;
   if (f.bedrooms) n++;
   if (f.negotiable) n++;

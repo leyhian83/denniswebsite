@@ -6,6 +6,11 @@
  * API / Supabase / PostgreSQL / CMS call without touching the pages.
  */
 import propertiesJson from "../data/properties.json";
+import {
+  MALAYSIA_AREAS,
+  MALAYSIA_STATES,
+  MALAYSIA_SUBAREAS,
+} from "../data/malaysiaLocations";
 import type { Property, PropertyCategory } from "../types";
 
 const { properties } = propertiesJson as { properties: Property[] };
@@ -16,6 +21,7 @@ export interface PropertyFilters {
   residentialType?: "condominium" | "landed";
   state?: string;
   area?: string;
+  subArea?: string;
   minPrice?: number;
   maxPrice?: number;
   bedrooms?: number;
@@ -43,13 +49,32 @@ export function getFeaturedProperties(limit?: number): Property[] {
   return limit ? featured.slice(0, limit) : featured;
 }
 
-/** Distinct states with their areas derived from the data. */
+/** All Malaysian states plus any additional states present in listing data. */
 export function getAvailableStates(): string[] {
-  return [...new Set(ALL.map((p) => p.state))].sort();
+  return [...new Set([...MALAYSIA_STATES, ...ALL.map((p) => p.state)])].sort();
 }
 
-export function getAreasForState(state: string): string[] {
-  return [...new Set(ALL.filter((p) => p.state === state).map((p) => p.area))].sort();
+/** Curated Malaysian areas plus any areas present in listing data. */
+export function getAreasForState(state?: string): string[] {
+  const curated = state
+    ? MALAYSIA_AREAS[state] ?? []
+    : Object.values(MALAYSIA_AREAS).flat();
+  const listed = ALL
+    .filter((p) => !state || p.state === state)
+    .map((p) => p.area);
+  return [...new Set([...curated, ...listed])].sort();
+}
+
+/** Curated neighbourhood options plus any sub-areas present in listing data. */
+export function getSubAreasForArea(area?: string): string[] {
+  const curated = area
+    ? MALAYSIA_SUBAREAS[area] ?? []
+    : Object.values(MALAYSIA_SUBAREAS).flat();
+  const listed = ALL
+    .filter((p) => !area || p.area === area)
+    .map((p) => p.subArea)
+    .filter((subArea): subArea is string => Boolean(subArea));
+  return [...new Set([...curated, ...listed])].sort();
 }
 
 /** Exact area match is ambiguous across states (e.g. "Damansara"),
@@ -80,6 +105,9 @@ export function filterProperties(
         normalize(p.area) === normalize(filter.area) ||
         normalize(p.subArea) === normalize(filter.area),
     );
+  }
+  if (filter.subArea) {
+    results = results.filter((p) => normalize(p.subArea) === normalize(filter.subArea));
   }
   if (filter.minPrice != null && filter.minPrice > 0) {
     results = results.filter((p) => p.price >= filter.minPrice!);

@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   getAreasForState,
   getAvailableStates,
+  getSubAreasForArea,
 } from "../../services/propertyService";
 import { propertyOptions, type FiltersValue } from "./filterOptions";
 
@@ -23,12 +24,17 @@ export function FilterControls({
 }: FilterControlsProps) {
   const [draft, setDraft] = useState<FiltersValue>(value);
   const states = getAvailableStates();
-  const areas = value.state ? getAreasForState(value.state) : [];
+  const areas = getAreasForState(draft.state);
+  const subAreas = getSubAreasForArea(draft.area);
 
   const update = (patch: Partial<FiltersValue>) => {
     const next = { ...draft, ...patch };
     // Changing state clears the previously chosen area.
-    if ("state" in patch) next.area = undefined;
+    if ("state" in patch) {
+      next.area = undefined;
+      next.subArea = undefined;
+    }
+    if ("area" in patch) next.subArea = undefined;
     setDraft(next);
     if (!showApply) onChange(next);
   };
@@ -109,6 +115,20 @@ export function FilterControls({
           <option value="">All areas</option>
           {areas.map((a) => (
             <option key={a} value={a}>{a}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="filter-group">
+        <span className="filter-group__label" id="f-subarea">Sub-area</span>
+        <select
+          aria-labelledby="f-subarea"
+          value={draft.subArea ?? ""}
+          onChange={(e) => update({ subArea: e.target.value || undefined })}
+        >
+          <option value="">All sub-areas</option>
+          {subAreas.map((subArea) => (
+            <option key={subArea} value={subArea}>{subArea}</option>
           ))}
         </select>
       </div>

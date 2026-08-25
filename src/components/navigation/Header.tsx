@@ -71,15 +71,16 @@ export function Header() {
         </ul>
 
         <div className="header__actions">
-          <a
-            className="btn btn--whatsapp btn--sm header__whatsapp"
-            href={buildWhatsAppUrl(generalWhatsAppMessage())}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MessageCircle size={16} />
-            <span className="header__cta-text">Enquire</span>
-          </a>
+    <a
+      className="btn btn--whatsapp btn--sm header__whatsapp"
+      href={buildWhatsAppUrl(generalWhatsAppMessage())}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`WhatsApp ${profile.phone}`}
+    >
+      <MessageCircle size={16} aria-hidden="true" />
+      <span className="header__cta-text">WhatsApp</span>
+    </a>
           <button
             type="button"
             className="header__menu-toggle"
