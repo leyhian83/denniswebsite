@@ -1,4 +1,4 @@
-# Leyhi Properties — Property Website Prototype
+# Dennis Property — Web Property Prototype
 
 A working, responsive property website prototype built for a private Malaysian
 property consultant. It combines a premium property-portal feel (subsale
@@ -194,9 +194,9 @@ Edit **`src/data/profile.json`** — one file, site-wide:
   "longBio": "…",
   "phone": "+6012-345 6789",
   "whatsappNumber": "60123456789",
-  "email": "adam@leyhiproperties.my",
+  "email": "enquiry@dennisproperty.my",
   "profilePhoto": "/media/profile/avatar.jpg",
-  "company": "Leyhi Properties",
+  "company": "Dennis Property",
   "renNumber": "REN 12345-A",
   "socials": [ { "label": "Facebook", "url": "https://facebook.com" } ]
 }

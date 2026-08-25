@@ -15,7 +15,7 @@ import { AUTH } from "../config/auth";
  * closed tab logs out. This is a prototype gate, not real security — swap for
  * a backend session when deploying.
  */
-const STORAGE_KEY = "leyhi.admin.authed";
+const STORAGE_KEY = "dennis.admin.authed";
 
 interface AuthContextValue {
   isAuthed: boolean;

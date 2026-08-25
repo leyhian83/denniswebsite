@@ -10,7 +10,7 @@ import type { Profile } from "../types";
 export const profile: Profile = profileJson as Profile;
 
 export const SITE = {
-  name: "Leyhi Properties",
+  name: "Dennis Property",
   tagline: "Premium property advisory across Malaysia",
   /** Base path for routing/asset URLs. Leave "/" for a root deploy. */
   basePath: "/",
