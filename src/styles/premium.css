@@ -951,6 +951,14 @@ body {
   }
 }
 
+@media (max-width: 1023px) {
+  /* Keep the fixed mobile menu viewport-sized; backdrop-filter on the sticky
+     header would otherwise make the header its containing block. */
+  .header {
+    backdrop-filter: none;
+  }
+}
+
 @media (max-width: 760px) {
   .explore-grid {
     grid-template-columns: 1fr;
