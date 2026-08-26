@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
-import { SITE } from "../../config/site";
-import { profile } from "../../config/site";
+import { Phone, Mail, MessageCircle } from "lucide-react";
+import { SITE, profile } from "../../config/site";
 import {
   buildWhatsAppUrl,
   generalWhatsAppMessage,
   telLink,
 } from "../../utils/whatsapp";
+import { BrandLogo } from "../common/BrandLogo";
 
 export function Footer() {
   return (
@@ -14,8 +14,7 @@ export function Footer() {
       <div className="container footer__inner">
         <div className="footer__col footer__col--brand">
           <Link to="/" className="footer__brand">
-            <MapPin size={18} aria-hidden="true" />
-            <span>{SITE.name}</span>
+            <BrandLogo compact />
           </Link>
           <p className="footer__tagline">{SITE.tagline}</p>
           <p className="footer__ren">

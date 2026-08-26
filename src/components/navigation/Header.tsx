@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Menu, X, MessageCircle, MapPin } from "lucide-react";
+import { Menu, X, MessageCircle } from "lucide-react";
 import { SITE, profile } from "../../config/site";
 import { buildWhatsAppUrl, generalWhatsAppMessage } from "../../utils/whatsapp";
+import { BrandLogo } from "../common/BrandLogo";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
@@ -44,13 +45,7 @@ export function Header() {
     <header className="header">
       <nav className="header__inner container" aria-label="Primary">
         <Link to="/" className="header__brand" aria-label={`${SITE.name} home`}>
-          <span className="header__brand-mark" aria-hidden="true">
-            <MapPin size={18} strokeWidth={2.2} />
-          </span>
-          <span className="header__brand-text">
-            <span className="header__brand-name">{SITE.name}</span>
-            <span className="header__brand-tag">{SITE.tagline}</span>
-          </span>
+          <BrandLogo showTagline />
         </Link>
 
         {/* Desktop nav */}

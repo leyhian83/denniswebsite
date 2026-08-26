@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import { MapPin } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { SITE } from "../config/site";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { AUTH } from "../config/auth";
+import { BrandLogo } from "../components/common/BrandLogo";
 
 /**
  * MVP login gate. Credentials live in src/config/auth.ts (currently
@@ -46,10 +46,7 @@ export function LoginPage() {
     <div className="login-page">
       <div className="login-page__panel">
         <Link to="/" className="login-page__brand" aria-label={`Back to ${SITE.name} home`}>
-          <span className="login-page__brand-mark" aria-hidden="true">
-            <MapPin size={16} strokeWidth={2.2} />
-          </span>
-          <span className="login-page__brand-name">{SITE.name}</span>
+          <BrandLogo compact />
         </Link>
 
         <p className="login-page__eyebrow u-eyebrow">Admin</p>
