@@ -98,6 +98,21 @@ export function PropertyDetailPage() {
     { label: "Price per sqft", value: pricePerSqFt ? `RM ${pricePerSqFt.toLocaleString("en-MY", { maximumFractionDigits: 2 })}` : undefined, icon: CircleDollarSign },
   ].filter((d) => d.value) as { label: string; value: string; icon: typeof Tag }[];
 
+  const detailGroups = [
+    {
+      label: "At a glance",
+      items: details.filter((detail) => ["Price", "Property Type", "Category", "Transaction", "Tenure"].includes(detail.label)),
+    },
+    {
+      label: "Space & rooms",
+      items: details.filter((detail) => ["Bedrooms", "Bathrooms", "Car Parks", "Built-up", "Land Area", "Dimensions"].includes(detail.label)),
+    },
+    {
+      label: "Condition & costs",
+      items: details.filter((detail) => ["Furnishing", "Completion", "Title Type", "Bumi Lot", "Direction", "Maintenance", "Price per sqft"].includes(detail.label)),
+    },
+  ].filter((group) => group.items.length > 0);
+
   const locationLines = [
     { label: "State", value: property.state },
     { label: "Area", value: property.area },
@@ -213,19 +228,26 @@ export function PropertyDetailPage() {
                 <h2 id="detail-specs" className="detail-section__title">
                   Property Details
                 </h2>
-                <dl className="detail-specs">
-                  {details.map((d) => {
-                    const Icon = d.icon;
-                    return (
-                      <div key={d.label} className="detail-spec">
-                        <dt className="detail-spec__label">
-                          <Icon size={16} aria-hidden="true" /> {d.label}
-                        </dt>
-                        <dd className="detail-spec__value">{d.value}</dd>
-                      </div>
-                    );
-                  })}
-                </dl>
+                <div className="detail-fact-groups">
+                  {detailGroups.map((group) => (
+                    <section key={group.label} className="detail-fact-group" aria-labelledby={`detail-group-${group.label.toLowerCase().replaceAll(" ", "-")}`}>
+                      <h3 id={`detail-group-${group.label.toLowerCase().replaceAll(" ", "-")}`} className="detail-fact-group__title">{group.label}</h3>
+                      <dl className="detail-specs">
+                        {group.items.map((d) => {
+                          const Icon = d.icon;
+                          return (
+                            <div key={d.label} className="detail-spec">
+                              <dt className="detail-spec__label">
+                                <Icon size={16} aria-hidden="true" /> {d.label}
+                              </dt>
+                              <dd className="detail-spec__value">{d.value}</dd>
+                            </div>
+                          );
+                        })}
+                      </dl>
+                    </section>
+                  ))}
+                </div>
               </section>
 
               {/* Description */}

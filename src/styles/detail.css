@@ -122,6 +122,20 @@
   color: var(--color-whiteout);
 }
 
+.detail-fact-group + .detail-fact-group {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+.detail-fact-group__title {
+  margin-bottom: var(--space-4);
+  color: var(--color-signal);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
 /* Specs grid — dark panels with whiteout values */
 .detail-specs {
   display: grid;
