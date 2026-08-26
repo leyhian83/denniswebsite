@@ -10,7 +10,7 @@
  * Vite dev server (not the production build); the admin service falls back to
  * manual/copy-paste paths when unavailable.
  */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import type { Plugin } from "vite";
@@ -158,6 +158,97 @@ export function projectWritePlugin(): Plugin {
 
       // ---- Project record write ----
       server.middlewares.use("/__admin/projects", (req, res) => {
+        const requestUrl = new URL(req.url ?? "/", "http://localhost");
+        const projectId = requestUrl.searchParams.get("id");
+        const permanent = requestUrl.searchParams.get("permanent") === "1";
+
+        if (req.method === "DELETE") {
+          if (!projectId) {
+            res.statusCode = 400;
+            res.end("id is required");
+            return;
+          }
+
+          try {
+            const current = JSON.parse(readFileSync(projectsPath, "utf8"));
+            const projects = Array.isArray(current.projects) ? current.projects : [];
+            const index = projects.findIndex((p: { id: string }) => p.id === projectId);
+            if (index < 0) {
+              res.statusCode = 404;
+              res.end("project not found");
+              return;
+            }
+
+            const [removed] = projects.splice(index, 1);
+            writeFileSync(
+              projectsPath,
+              JSON.stringify({ ...current, projects }, null, 2) + "\n",
+              "utf8",
+            );
+
+            // Permanent deletion also removes the project's local prototype media.
+            if (permanent && removed?.slug) {
+              const mediaDir = path.join(mediaRoot, "projects", safeName(removed.slug));
+              try {
+                rmSync(mediaDir, { recursive: true, force: true });
+              } catch {
+                // The record is still deleted if media cleanup is unavailable.
+              }
+            }
+
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ ok: true, project: removed }));
+          } catch (err) {
+            res.statusCode = 500;
+            res.end(String(err instanceof Error ? err.message : err));
+          }
+          return;
+        }
+
+        if (req.method === "PUT") {
+          if (!projectId) {
+            res.statusCode = 400;
+            res.end("id is required");
+            return;
+          }
+
+          let body = "";
+          req.on("data", (chunk) => (body += chunk));
+          req.on("end", () => {
+            try {
+              const incoming = JSON.parse(body);
+              const current = JSON.parse(readFileSync(projectsPath, "utf8"));
+              const projects = Array.isArray(current.projects) ? current.projects : [];
+              const index = projects.findIndex((p: { id: string }) => p.id === projectId);
+              if (index < 0) {
+                res.statusCode = 404;
+                res.end("project not found");
+                return;
+              }
+              if (!incoming || incoming.id !== projectId || typeof incoming.slug !== "string") {
+                res.statusCode = 400;
+                res.end("invalid payload");
+                return;
+              }
+
+              projects[index] = incoming;
+              writeFileSync(
+                projectsPath,
+                JSON.stringify({ ...current, projects }, null, 2) + "\n",
+                "utf8",
+              );
+              res.statusCode = 200;
+              res.setHeader("Content-Type", "application/json");
+              res.end(JSON.stringify({ ok: true, project: incoming }));
+            } catch (err) {
+              res.statusCode = 500;
+              res.end(String(err instanceof Error ? err.message : err));
+            }
+          });
+          return;
+        }
+
         if (req.method !== "POST") {
           res.statusCode = 405;
           res.end("Method Not Allowed");

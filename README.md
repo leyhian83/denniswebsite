@@ -233,7 +233,9 @@ WhatsApp CTAs, and enquiry cards. The **WhatsApp number is read from
 /areas/:stateSlug/:areaSlug     Area detail with listings
 /contact                        Contact form + details
 /login                          Admin login (abc123 / qwerty12345)
+/admin/projects                 Admin project dashboard (login required)
 /admin/add-project              Add a project (login required)
+/admin/projects/:id/edit        Edit a project (login required)
 anything-else                   404 page
 ```
 
@@ -285,7 +287,9 @@ There is a prototype admin area so you can add new projects without touching cod
 | Route | Purpose |
 | --- | --- |
 | `/login` | Admin sign-in (standalone page) |
+| `/admin/projects` | Protected project dashboard with search, filters, edit, archive and delete actions |
 | `/admin/add-project` | Protected form that adds a project to `src/data/projects.json` |
+| `/admin/projects/:id/edit` | Protected form for editing an existing project while keeping its public URL stable |
 
 **Credentials (MVP):**
 
@@ -300,11 +304,17 @@ Both are stored in **`src/config/auth.ts`** — edit that one file to change the
 
 ### How the add-project form works
 
-1. Visit `/login`, sign in, and you land on `/admin/add-project`.
+1. Visit `/login`, sign in, and you land on `/admin/projects`.
 2. Fill in the project (name, developer, category, location, price range, unit types, facilities, description…). Required fields are marked; validation happens on submit.
 3. **Add photos / video** — click the uploader buttons to choose image (`jpg/png/webp/gif`) and video (`mp4/webm/mov`) files, or paste a YouTube URL for the video. Uploaded files are saved to `public/media/projects/<slug>/` and their paths automatically populate the project's `photos` and `videos` fields.
 4. **Save project** posts the record to a tiny dev-only Vite middleware (`vite-plugin-project-write.ts`), which appends it to `src/data/projects.json`.
 5. The project immediately appears on `/projects` and its auto-generated detail page `/projects/<slug>`. If no photos were added it defaults to `/media/projects/<slug>/cover.jpg`.
+
+The admin dashboard can archive a project (hiding it from the public catalogue while
+keeping it restorable), restore an archived project, or permanently delete it from
+the local JSON file. Editing preserves the project ID and public slug. These CRUD
+actions are prototype-only local file operations and should be moved to a real
+database before relying on them in a Vercel deployment.
 
 > **Media tip:** because media lives in `public/`, after uploading a photo the dev server serves it straight from disk — just reload the page to see the new image/video.
 

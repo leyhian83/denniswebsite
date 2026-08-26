@@ -104,26 +104,41 @@ export interface ProjectInput {
   featured?: boolean;
 }
 
-export type CreateProjectResult =
+export type ProjectMutationResult =
   | { ok: true; project: Project; persisted: boolean; json: string }
   | { ok: false; error: string };
 
+export type CreateProjectResult = ProjectMutationResult;
+
+export type DeleteProjectResult =
+  | { ok: true; project: Project; persisted: boolean; permanent: boolean }
+  | { ok: false; error: string };
+
 export function getProjectBySlug(slug: string): Project | undefined {
-  return ALL.find((p) => p.slug === slug);
+  return ALL.find((p) => p.slug === slug && !p.archived);
 }
 
 export function getAllProjects(): Project[] {
-  return ALL;
+  return ALL.filter((p) => !p.archived);
+}
+
+/** Admin-only view: includes archived projects so they can be restored. */
+export function getAllProjectsForAdmin(): Project[] {
+  return [...ALL];
+}
+
+export function getAdminProjectById(id: string): Project | undefined {
+  return ALL.find((p) => p.id === id);
 }
 
 export function getProjectsByCategory(category: ProjectCategory, propertyType?: string): Project[] {
   return ALL.filter(
-    (p) => p.category === category && (!propertyType || p.propertyType === propertyType),
+    (p) => !p.archived && p.category === category && (!propertyType || p.propertyType === propertyType),
   );
 }
 
 export function getFeaturedProjects(limit?: number): Project[] {
-  const featured = ALL.filter((p) => p.featured);
+  const featured = ALL.filter((p) => p.featured && !p.archived);
   return limit ? featured.slice(0, limit) : featured;
 }
 
@@ -169,6 +184,9 @@ export async function createProject(input: ProjectInput): Promise<CreateProjectR
     photos: input.photos?.length ? input.photos : defaultPhotos(slug),
     videos: input.videos?.length ? input.videos : undefined,
     featured: input.featured,
+    archived: false,
+    createdAt: new Date().toISOString().slice(0, 10),
+    updatedAt: new Date().toISOString(),
   };
 
   const json = JSON.stringify({ ...projectsJson, projects: [...ALL, project] }, null, 2)
@@ -183,11 +201,118 @@ export async function createProject(input: ProjectInput): Promise<CreateProjectR
       body: JSON.stringify(project),
     });
     if (res.ok) {
+      ALL.push(project);
       return { ok: true, project, persisted: true, json };
     }
+    ALL.push(project);
     return { ok: true, project, persisted: false, json };
   } catch {
+    ALL.push(project);
     return { ok: true, project, persisted: false, json };
+  }
+}
+
+/** Update an existing project while keeping its stable id and public slug. */
+export async function updateProject(
+  id: string,
+  input: ProjectInput,
+): Promise<ProjectMutationResult> {
+  const index = ALL.findIndex((p) => p.id === id);
+  const current = index >= 0 ? ALL[index] : undefined;
+  if (!current) return { ok: false, error: "Project not found." };
+
+  const project: Project = {
+    ...current,
+    name: input.name.trim(),
+    developer: input.developer || undefined,
+    category: input.category,
+    propertyType: input.propertyType || undefined,
+    state: input.state.trim(),
+    area: input.area.trim(),
+    subArea: input.subArea || undefined,
+    address: input.address || undefined,
+    priceFrom: input.priceFrom,
+    priceTo: input.priceTo,
+    tenure: input.tenure || undefined,
+    completionDate: input.completionDate || undefined,
+    projectStatus: input.projectStatus || undefined,
+    unitTypes: input.unitTypes?.length ? input.unitTypes : undefined,
+    description: input.description.trim(),
+    facilities: input.facilities?.length ? input.facilities : undefined,
+    photos: input.photos?.length ? input.photos : defaultPhotos(current.slug),
+    videos: input.videos?.length ? input.videos : undefined,
+    featured: input.featured,
+    updatedAt: new Date().toISOString(),
+  };
+
+  const json = JSON.stringify(
+    { ...projectsJson, projects: ALL.map((p, i) => (i === index ? project : p)) },
+    null,
+    2,
+  ).replace(/\n/g, "\r\n");
+
+  try {
+    const res = await fetch(`/__admin/projects?id=${encodeURIComponent(id)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(project),
+    });
+    if (!res.ok) return { ok: false, error: "The project could not be updated." };
+    ALL[index] = project;
+    return { ok: true, project, persisted: true, json };
+  } catch {
+    ALL[index] = project;
+    return { ok: true, project, persisted: false, json };
+  }
+}
+
+/** Archive a project so it disappears publicly but remains recoverable. */
+export async function archiveProject(id: string): Promise<DeleteProjectResult> {
+  return setProjectArchived(id, true);
+}
+
+/** Restore an archived project to the public catalogue. */
+export async function restoreProject(id: string): Promise<DeleteProjectResult> {
+  return setProjectArchived(id, false);
+}
+
+async function setProjectArchived(id: string, archived: boolean): Promise<DeleteProjectResult> {
+  const index = ALL.findIndex((p) => p.id === id);
+  const current = index >= 0 ? ALL[index] : undefined;
+  if (!current) return { ok: false, error: "Project not found." };
+
+  const project = { ...current, archived, updatedAt: new Date().toISOString() };
+  try {
+    const res = await fetch(`/__admin/projects?id=${encodeURIComponent(id)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(project),
+    });
+    if (!res.ok) return { ok: false, error: "The project status could not be updated." };
+    ALL[index] = project;
+    return { ok: true, project, persisted: true, permanent: false };
+  } catch {
+    ALL[index] = project;
+    return { ok: true, project, persisted: false, permanent: false };
+  }
+}
+
+/** Permanently remove a project from the local prototype data file. */
+export async function deleteProject(id: string): Promise<DeleteProjectResult> {
+  const index = ALL.findIndex((p) => p.id === id);
+  const current = index >= 0 ? ALL[index] : undefined;
+  if (!current) return { ok: false, error: "Project not found." };
+
+  try {
+    const res = await fetch(`/__admin/projects?id=${encodeURIComponent(id)}&permanent=1`, {
+      method: "DELETE",
+    });
+    if (!res.ok) return { ok: false, error: "The project could not be deleted." };
+    ALL.splice(index, 1);
+    return { ok: true, project: current, persisted: true, permanent: true };
+  } catch {
+    ALL.splice(index, 1);
+    return { ok: true, project: current, persisted: false, permanent: true };
   }
 }
 

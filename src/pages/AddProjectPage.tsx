@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, LogOut, PlusCircle, AlertCircle } from "lucide-react";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { useAuth } from "../context/AuthContext";
 import {
   createProject,
+  getAdminProjectById,
   slugify,
+  updateProject,
   type ProjectInput,
-  type CreateProjectResult,
+  type ProjectMutationResult,
   type UploadedMedia,
 } from "../services/projectService";
 import { MediaUploader } from "../components/admin/MediaUploader";
@@ -24,6 +26,7 @@ import {
   MALAYSIA_SUBAREAS,
   MALAYSIA_STATES,
 } from "../data/malaysiaLocations";
+import type { Project } from "../types/project";
 
 type FormValues = {
   name: string;
@@ -81,24 +84,77 @@ function numOrUndefined(value: string): number | undefined {
   return value.trim() !== "" && Number.isFinite(n) && n > 0 ? n : undefined;
 }
 
+function formValuesFromProject(project: Project): FormValues {
+  return {
+    name: project.name,
+    developer: project.developer ?? "",
+    category: project.category,
+    propertyType: project.propertyType ?? "",
+    state: project.state,
+    area: project.area,
+    subArea: project.subArea ?? "",
+    address: project.address ?? "",
+    priceFrom: project.priceFrom?.toString() ?? "",
+    priceTo: project.priceTo?.toString() ?? "",
+    tenure: project.tenure ?? "",
+    completionDate: project.completionDate ?? "",
+    projectStatus: project.projectStatus ?? "",
+    unitTypes: project.unitTypes?.join(", ") ?? "",
+    description: project.description,
+    facilities: project.facilities?.join(", ") ?? "",
+    photos: "",
+    featured: Boolean(project.featured),
+  };
+}
+
+function mediaFromProject(project?: Project): {
+  photos: UploadedMedia[];
+  videos: UploadedMedia[];
+  videoUrl: string;
+} {
+  if (!project) return { photos: [], videos: [], videoUrl: "" };
+
+  return {
+    photos: (project.photos ?? []).map((url) => ({
+      url,
+      fileName: url.split("/").pop() ?? url,
+      kind: "image" as const,
+    })),
+    videos: (project.videos ?? [])
+      .filter((video) => video.type === "local")
+      .map((video) => ({
+        url: video.url,
+        fileName: video.url.split("/").pop() ?? video.url,
+        kind: "video" as const,
+      })),
+    videoUrl: project.videos?.find((video) => video.type === "youtube")?.url ?? "",
+  };
+}
+
 export function AddProjectPage() {
-  usePageMeta({ title: "Add a Project" });
+  const { projectId } = useParams<{ projectId?: string }>();
+  const editingProject = projectId ? getAdminProjectById(projectId) : undefined;
+  const isEditing = Boolean(projectId);
+  usePageMeta({ title: isEditing ? "Edit Project" : "Add a Project" });
 
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const [values, setValues] = useState<FormValues>(EMPTY);
+  const [values, setValues] = useState<FormValues>(() =>
+    editingProject ? formValuesFromProject(editingProject) : EMPTY,
+  );
   const [errors, setErrors] = useState<Partial<Record<keyof FormValues, string>>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<CreateProjectResult | null>(null);
+  const [result, setResult] = useState<ProjectMutationResult | null>(null);
 
   // Uploaded media, keyed by kind. Staged as files are chosen and included in
   // the saved project's `photos` / `videos`.
-  const [photos, setPhotos] = useState<UploadedMedia[]>([]);
-  const [videos, setVideos] = useState<UploadedMedia[]>([]);
-  const [videoUrl, setVideoUrl] = useState("");
+  const initialMedia = mediaFromProject(editingProject);
+  const [photos, setPhotos] = useState<UploadedMedia[]>(initialMedia.photos);
+  const [videos, setVideos] = useState<UploadedMedia[]>(initialMedia.videos);
+  const [videoUrl, setVideoUrl] = useState(initialMedia.videoUrl);
 
   // Folder slug used for uploads is derived from the current project name.
-  const uploadSlug = slugify(values.name);
+  const uploadSlug = editingProject?.slug ?? slugify(values.name);
   const areaOptions = values.state
     ? MALAYSIA_AREAS[values.state] ?? []
     : Array.from(new Set(Object.values(MALAYSIA_AREAS).flat())).sort();
@@ -185,10 +241,28 @@ export function AddProjectPage() {
       featured: values.featured,
     };
 
-    const res = await createProject(input);
+    const res = isEditing && projectId
+      ? await updateProject(projectId, input)
+      : await createProject(input);
     setResult(res);
     setSubmitting(false);
   };
+
+  if (isEditing && !editingProject) {
+    return (
+      <section className="section">
+        <div className="container container--narrow">
+          <div className="admin-form__banner" role="alert">
+            <AlertCircle size={18} aria-hidden="true" />
+            <span>This project could not be found.</span>
+          </div>
+          <Link to="/admin/projects" className="btn btn--outline">
+            <ArrowLeft size={16} aria-hidden="true" /> Back to projects
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   if (result && result.ok) {
     return (
@@ -197,11 +271,13 @@ export function AddProjectPage() {
           <div className="admin-success" role="status">
             <CheckCircle2 size={44} aria-hidden="true" />
             <p className="admin-success__eyebrow u-eyebrow">Saved</p>
-            <h1 className="admin-success__title">Project added</h1>
+            <h1 className="admin-success__title">
+              {isEditing ? "Project updated" : "Project added"}
+            </h1>
             <p className="admin-success__text">
               <strong>{result.ok ? result.project.name : ""}</strong>{" "}
-              {result.ok && result.persisted
-                ? "has been written to src/data/projects.json. It now appears in Projects and the homepage featured section."
+                {result.ok && result.persisted
+                 ? "has been written to src/data/projects.json and is live in the public catalogue."
                 : result.ok
                   ? "was created for this session. The dev-server file writer is not available, so copy the JSON below into src/data/projects.json to keep it."
                   : "could not be created. Please try again."}
@@ -215,16 +291,22 @@ export function AddProjectPage() {
                 >
                   View project page
                 </Link>
-                <button
+                {!isEditing && <button
                   type="button"
                   className="btn btn--outline"
                   onClick={() => {
                     setValues(EMPTY);
+                    setPhotos([]);
+                    setVideos([]);
+                    setVideoUrl("");
                     setResult(null);
                   }}
                 >
                   <PlusCircle size={16} aria-hidden="true" /> Add another
-                </button>
+                </button>}
+                <Link className="btn btn--outline" to="/admin/projects">
+                  Manage projects
+                </Link>
               </div>
             )}
 
@@ -245,11 +327,13 @@ export function AddProjectPage() {
       <section className="page-header page-header--admin">
         <div className="container">
           <p className="page-header__eyebrow u-eyebrow">Admin</p>
-          <h1 className="page-header__title">Add a project</h1>
+          <h1 className="page-header__title">
+            {isEditing ? `Edit ${editingProject?.name ?? "project"}` : "Add a project"}
+          </h1>
           <p className="page-header__desc">
-            Fill in the details and the project is saved to the local{" "}
-            <code>projects.json</code> data file — no React code required. A unique
-            page is generated automatically from the project name.
+            {isEditing
+              ? "Update the project details below. Its public URL and project ID will stay stable."
+              : <>Fill in the details and the project is saved to the local <code>projects.json</code> data file — no React code required. A unique page is generated automatically from the project name.</>}
           </p>
           <div className="page-header__actions">
             <button
@@ -262,7 +346,7 @@ export function AddProjectPage() {
             >
               <LogOut size={14} aria-hidden="true" /> Log out
             </button>
-            <Link to="/projects" className="btn btn--ghost btn--sm">
+            <Link to="/admin/projects" className="btn btn--ghost btn--sm">
               <ArrowLeft size={14} aria-hidden="true" /> All projects
             </Link>
           </div>
@@ -476,9 +560,10 @@ export function AddProjectPage() {
                 <label htmlFor="ap-completion">Completion date</label>
                 <input
                   id="ap-completion"
-                  type="month"
+                  type="text"
                   value={values.completionDate}
                   onChange={set("completionDate")}
+                  placeholder="e.g. Q4 2027 or 2029"
                 />
               </div>
 
@@ -605,9 +690,9 @@ export function AddProjectPage() {
                 className="btn btn--primary btn--lg"
                 disabled={submitting}
               >
-                {submitting ? "Saving…" : "Save project"}
+                {submitting ? "Saving…" : isEditing ? "Save changes" : "Save project"}
               </button>
-              <Link to="/projects" className="btn btn--outline btn--lg">
+              <Link to="/admin/projects" className="btn btn--outline btn--lg">
                 Cancel
               </Link>
             </div>

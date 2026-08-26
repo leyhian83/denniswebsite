@@ -23,7 +23,7 @@ export function LoginPage() {
 
   // Preserve the page the visitor was trying to reach.
   const from =
-    (location.state as { from?: string } | null)?.from ?? "/admin/add-project";
+    (location.state as { from?: string } | null)?.from ?? "/admin/projects";
 
   if (isAuthed) {
     return <Navigate to={from} replace />;
@@ -57,7 +57,7 @@ export function LoginPage() {
           Property <em>desk</em>
         </h1>
         <p className="login-page__intro">
-          Sign in to add new projects or property listings. This is a prototype gate —
+          Sign in to manage projects and property listings. This is a prototype gate —
           credentials are stored in the site config.
         </p>
 

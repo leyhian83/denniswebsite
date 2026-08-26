@@ -13,6 +13,7 @@ import { ContactPage } from "./pages/ContactPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LoginPage } from "./pages/LoginPage";
 import { AddProjectPage } from "./pages/AddProjectPage";
+import { AdminProjectsPage } from "./pages/AdminProjectsPage";
 import { AddPropertyPage } from "./pages/AddPropertyPage";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
 
@@ -58,6 +59,22 @@ export default function App() {
           <Route path="contact" element={<ContactPage />} />
 
           {/* Admin — add new projects (login required) */}
+          <Route
+            path="admin/projects"
+            element={
+              <ProtectedRoute>
+                <AdminProjectsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/projects/:projectId/edit"
+            element={
+              <ProtectedRoute>
+                <AddProjectPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="admin/add-project"
             element={

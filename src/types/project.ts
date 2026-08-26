@@ -45,6 +45,9 @@ export interface Project {
   videos?: VideoSource[];
 
   featured?: boolean;
+  archived?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const PROJECT_CATEGORY_LABELS: Record<ProjectCategory, string> = {
