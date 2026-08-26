@@ -174,6 +174,42 @@ export function FilterControls({
       </div>
 
       <div className="filter-group">
+        <span className="filter-group__label" id="f-furnishing">Furnishing</span>
+        <select
+          aria-labelledby="f-furnishing"
+          value={draft.furnishing ?? ""}
+          onChange={(e) => update({ furnishing: e.target.value || undefined })}
+        >
+          <option value="">Any furnishing</option>
+          {propertyOptions.furnishing.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+
+      <div className="filter-group">
+        <span className="filter-group__label" id="f-size">Built-up</span>
+        <select
+          aria-labelledby="f-size"
+          value={draft.minBuiltUp != null ? String(draft.minBuiltUp) : ""}
+          onChange={(e) => update({ minBuiltUp: e.target.value ? Number(e.target.value) : undefined })}
+        >
+          <option value="">Any size</option>
+          {propertyOptions.builtUp.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+
+      <div className="filter-group">
+        <span className="filter-group__label" id="f-parking">Parking</span>
+        <select
+          aria-labelledby="f-parking"
+          value={draft.parking != null ? String(draft.parking) : ""}
+          onChange={(e) => update({ parking: e.target.value ? Number(e.target.value) : undefined })}
+        >
+          <option value="">Any parking</option>
+          {propertyOptions.parking.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+
+      <div className="filter-group">
         <span className="filter-group__label" id="f-negotiable">Pricing</span>
         <select
           aria-labelledby="f-negotiable"

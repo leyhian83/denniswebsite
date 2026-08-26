@@ -34,6 +34,9 @@ export function projectWritePlugin(): Plugin {
   const projectsPath = fileURLToPath(
     new URL("./src/data/projects.json", import.meta.url),
   );
+  const propertiesPath = fileURLToPath(
+    new URL("./src/data/properties.json", import.meta.url),
+  );
   const mediaRoot = fileURLToPath(new URL("./public/media", import.meta.url));
 
   return {
@@ -61,6 +64,7 @@ export function projectWritePlugin(): Plugin {
 
             const payload = JSON.parse(body.toString("utf8"));
             const slug = payload.slug;
+            const scope = payload.scope === "properties" ? "properties" : "projects";
             const files = Array.isArray(payload.files) ? payload.files : [];
             if (!slug) {
               res.statusCode = 400;
@@ -68,7 +72,7 @@ export function projectWritePlugin(): Plugin {
               return;
             }
 
-            const dir = path.join(mediaRoot, "projects", safeName(slug));
+            const dir = path.join(mediaRoot, scope, safeName(slug));
             mkdirSync(dir, { recursive: true });
 
             const saved: { file: string; url: string; kind: "image" | "video" }[] = [];
@@ -87,7 +91,7 @@ export function projectWritePlugin(): Plugin {
               writeFileSync(path.join(dir, fileName), buf);
               saved.push({
                 file: name,
-                url: `/media/projects/${slug}/${fileName}`,
+                url: `/media/${scope}/${slug}/${fileName}`,
                 kind,
               });
             }
@@ -99,9 +103,52 @@ export function projectWritePlugin(): Plugin {
                 ok: true,
                 slug,
                 files: saved,
-                folder: `/media/projects/${slug}/`,
+                folder: `/media/${scope}/${slug}/`,
               }),
             );
+          } catch (err) {
+            res.statusCode = 500;
+            res.end(String(err instanceof Error ? err.message : err));
+          }
+        });
+      });
+
+      // ---- Property record write ----
+      server.middlewares.use("/__admin/properties", (req, res) => {
+        if (req.method !== "POST") {
+          res.statusCode = 405;
+          res.end("Method Not Allowed");
+          return;
+        }
+
+        let body = "";
+        req.on("data", (chunk) => (body += chunk));
+        req.on("end", () => {
+          try {
+            const incoming = JSON.parse(body);
+            if (!incoming || typeof incoming.slug !== "string") {
+              res.statusCode = 400;
+              res.end("invalid payload");
+              return;
+            }
+
+            const current = JSON.parse(readFileSync(propertiesPath, "utf8"));
+            const properties = Array.isArray(current.properties) ? current.properties : [];
+            if (properties.some((p: { slug: string }) => p.slug === incoming.slug)) {
+              res.statusCode = 409;
+              res.end("duplicate slug");
+              return;
+            }
+
+            properties.push(incoming);
+            writeFileSync(
+              propertiesPath,
+              JSON.stringify({ ...current, properties }, null, 2) + "\n",
+              "utf8",
+            );
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ ok: true, property: incoming }));
           } catch (err) {
             res.statusCode = 500;
             res.end(String(err instanceof Error ? err.message : err));

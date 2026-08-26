@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { ImagePlus, Film, Loader2, X } from "lucide-react";
+import { uploadPropertyMedia } from "../../services/propertyService";
 import { uploadProjectMedia, type UploadedMedia } from "../../services/projectService";
 
 export type { UploadedMedia };
@@ -13,6 +14,7 @@ interface MediaUploaderProps {
   onChange: (items: UploadedMedia[]) => void;
   /** Kind of files this instance accepts. */
   kind: "image" | "video";
+  scope?: "projects" | "properties";
 }
 
 /**
@@ -22,7 +24,7 @@ interface MediaUploaderProps {
  * public/media/projects/<slug>/. The returned public URLs flow back through
  * `onChange` so the parent fills the project's `photos` / `videos`.
  */
-export function MediaUploader({ slug, value, onChange, kind }: MediaUploaderProps) {
+export function MediaUploader({ slug, value, onChange, kind, scope = "projects" }: MediaUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -34,7 +36,9 @@ export function MediaUploader({ slug, value, onChange, kind }: MediaUploaderProp
     setUploading(true);
     setError("");
 
-    const res = await uploadProjectMedia(Array.from(files), slug);
+    const res = scope === "properties"
+      ? await uploadPropertyMedia(Array.from(files), slug)
+      : await uploadProjectMedia(Array.from(files), slug);
     if (!res.ok) {
       setError(res.error);
       setUploading(false);
@@ -81,7 +85,7 @@ export function MediaUploader({ slug, value, onChange, kind }: MediaUploaderProp
       )}
       {!slug && !error && !uploading && (
         <p className="media-uploader__hint">
-          Add a project name first so files save to the right folder.
+           Add a listing name first so files save to the right folder.
         </p>
       )}
 

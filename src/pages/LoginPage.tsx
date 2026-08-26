@@ -57,7 +57,7 @@ export function LoginPage() {
           Property <em>desk</em>
         </h1>
         <p className="login-page__intro">
-          Sign in to add new projects to your listings. This is a prototype gate —
+          Sign in to add new projects or property listings. This is a prototype gate —
           credentials are stored in the site config.
         </p>
 

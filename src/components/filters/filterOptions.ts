@@ -10,6 +10,9 @@ export interface FiltersValue {
   minPrice?: number;
   maxPrice?: number;
   bedrooms?: number;
+  furnishing?: string;
+  minBuiltUp?: number;
+  parking?: number;
   /** Price negotiability tri-state. */
   negotiable?: "negotiable" | "non-negotiable";
 }
@@ -41,6 +44,22 @@ export const propertyOptions = {
     { value: "2", label: "2+" },
     { value: "3", label: "3+" },
     { value: "4", label: "4+" },
+  ],
+  furnishing: [
+    { value: "Fully Furnished", label: "Fully furnished" },
+    { value: "Partially Furnished", label: "Partially furnished" },
+    { value: "Unfurnished", label: "Unfurnished" },
+  ],
+  builtUp: [
+    { value: "500", label: "500+ sqft" },
+    { value: "1000", label: "1,000+ sqft" },
+    { value: "1500", label: "1,500+ sqft" },
+    { value: "2500", label: "2,500+ sqft" },
+  ],
+  parking: [
+    { value: "1", label: "1+ space" },
+    { value: "2", label: "2+ spaces" },
+    { value: "3", label: "3+ spaces" },
   ],
   negotiable: [
     { value: "negotiable", label: "Negotiable" },

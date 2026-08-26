@@ -11,7 +11,14 @@ import {
   MALAYSIA_STATES,
   MALAYSIA_SUBAREAS,
 } from "../data/malaysiaLocations";
-import type { Property, PropertyCategory } from "../types";
+import type {
+  BumiLotStatus,
+  Property,
+  PropertyCategory,
+  PropertyStatus,
+  PropertyTitleType,
+  VideoSource,
+} from "../types";
 
 const { properties } = propertiesJson as { properties: Property[] };
 const ALL: Property[] = properties;
@@ -25,11 +32,67 @@ export interface PropertyFilters {
   minPrice?: number;
   maxPrice?: number;
   bedrooms?: number;
+  furnishing?: string;
+  minBuiltUp?: number;
+  parking?: number;
   negotiable?: "negotiable" | "non-negotiable";
   query?: string;
 }
 
 export type PropertySort = "newest" | "price-asc" | "price-desc";
+
+export interface UploadedMedia {
+  url: string;
+  fileName: string;
+  kind: "image" | "video";
+}
+
+export type UploadMediaResult =
+  | { ok: true; items: UploadedMedia[]; folder: string }
+  | { ok: false; error: string };
+
+export interface PropertyInput {
+  title: string;
+  category: PropertyCategory;
+  propertyType: string;
+  state: string;
+  area: string;
+  subArea?: string;
+  address?: string;
+  block?: string;
+  unitNumber?: string;
+  floor?: string;
+  hideAddressDetails?: boolean;
+  price: number;
+  negotiable?: boolean;
+  bedrooms?: number;
+  bathrooms?: number;
+  carParks?: number;
+  builtUpSqFt?: number;
+  landAreaSqFt?: number;
+  builtUpWidthFt?: number;
+  builtUpLengthFt?: number;
+  tenure?: string;
+  furnishing?: string;
+  furnishingDetails?: string[];
+  completionYear?: number;
+  titleType?: PropertyTitleType;
+  bumiLot?: BumiLotStatus;
+  facingDirection?: string;
+  maintenanceFee?: number;
+  mapUrl?: string;
+  headline?: string;
+  description: string;
+  keyFeatures?: string[];
+  photos: string[];
+  videos?: VideoSource[];
+  featured?: boolean;
+  status?: PropertyStatus;
+}
+
+export type CreatePropertyResult =
+  | { ok: true; property: Property; persisted: boolean; json: string }
+  | { ok: false; error: string };
 
 /** Return the single property for a slug, or undefined. */
 export function getPropertyBySlug(slug: string): Property | undefined {
@@ -42,6 +105,68 @@ export function getPropertyById(id: string): Property | undefined {
 
 export function getAllProperties(): Property[] {
   return ALL;
+}
+
+export function getPricePerSqFt(property: Property): number | undefined {
+  if (!property.builtUpSqFt || property.builtUpSqFt <= 0 || property.price <= 0) {
+    return undefined;
+  }
+  return property.price / property.builtUpSqFt;
+}
+
+export async function uploadPropertyMedia(
+  files: File[],
+  slug: string,
+): Promise<UploadMediaResult> {
+  return uploadMedia(files, slug, "properties");
+}
+
+async function uploadMedia(
+  files: File[],
+  slug: string,
+  scope: "properties" | "projects",
+): Promise<UploadMediaResult> {
+  try {
+    const res = await fetch("/__admin/media", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        slug,
+        scope,
+        files: await Promise.all(files.map(async (file) => ({
+          name: file.name,
+          data: await blobToBase64(file),
+        }))),
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) {
+      return { ok: false, error: data?.error || "Upload failed." };
+    }
+    return {
+      ok: true,
+      items: (data.files as { url: string; fileName?: string; kind: string }[]).map((file) => ({
+        url: file.url,
+        fileName: file.fileName ?? file.url.split("/").pop() ?? "",
+        kind: file.kind as "image" | "video",
+      })),
+      folder: data.folder as string,
+    };
+  } catch {
+    return { ok: false, error: "Upload unavailable in this environment." };
+  }
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.slice(result.indexOf(",") + 1));
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
 }
 
 export function getFeaturedProperties(limit?: number): Property[] {
@@ -117,6 +242,15 @@ export function filterProperties(
   }
   if (filter.bedrooms != null && filter.bedrooms > 0) {
     results = results.filter((p) => (p.bedrooms ?? 0) >= filter.bedrooms!);
+  }
+  if (filter.furnishing) {
+    results = results.filter((p) => p.furnishing === filter.furnishing);
+  }
+  if (filter.minBuiltUp != null && filter.minBuiltUp > 0) {
+    results = results.filter((p) => (p.builtUpSqFt ?? 0) >= filter.minBuiltUp!);
+  }
+  if (filter.parking != null && filter.parking > 0) {
+    results = results.filter((p) => (p.carParks ?? 0) >= filter.parking!);
   }
   if (filter.negotiable) {
     results = results.filter((p) =>
@@ -202,4 +336,93 @@ export function countPropertiesForArea(state: string, area?: string): number {
       (normalize(p.area) === normalize(area) || normalize(p.subArea) === normalize(area))
     );
   }).length;
+}
+
+export function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function nextPropertyId(existing: Property[] = ALL): string {
+  const nums = existing
+    .map((p) => /^p-(\d+)$/.exec(p.id)?.[1])
+    .filter((n): n is string => Boolean(n))
+    .map(Number);
+  const next = nums.length ? Math.max(...nums) + 1 : 1;
+  return `p-${String(next).padStart(3, "0")}`;
+}
+
+export async function createProperty(input: PropertyInput): Promise<CreatePropertyResult> {
+  const slug = slugify(input.title);
+  if (!slug) return { ok: false, error: "A listing headline is required to create a URL." };
+  if (ALL.some((property) => property.slug === slug)) {
+    return { ok: false, error: "A property with this headline already exists." };
+  }
+
+  const property: Property = {
+    id: nextPropertyId(ALL),
+    slug,
+    title: input.title.trim(),
+    headline: input.headline?.trim() || input.title.trim(),
+    transactionType: "subsale",
+    category: input.category,
+    propertyType: input.propertyType.trim(),
+    state: input.state.trim(),
+    area: input.area.trim(),
+    subArea: input.subArea?.trim() || undefined,
+    address: input.address?.trim() || undefined,
+    block: input.block?.trim() || undefined,
+    unitNumber: input.unitNumber?.trim() || undefined,
+    floor: input.floor?.trim() || undefined,
+    hideAddressDetails: input.hideAddressDetails,
+    price: input.price,
+    currency: "MYR",
+    negotiable: input.negotiable,
+    bedrooms: input.bedrooms,
+    bathrooms: input.bathrooms,
+    carParks: input.carParks,
+    builtUpSqFt: input.builtUpSqFt,
+    landAreaSqFt: input.landAreaSqFt,
+    builtUpWidthFt: input.builtUpWidthFt,
+    builtUpLengthFt: input.builtUpLengthFt,
+    tenure: input.tenure?.trim() || undefined,
+    furnishing: input.furnishing || undefined,
+    furnishingDetails: input.furnishingDetails?.length ? input.furnishingDetails : undefined,
+    completionYear: input.completionYear,
+    titleType: input.titleType,
+    bumiLot: input.bumiLot,
+    facingDirection: input.facingDirection || undefined,
+    maintenanceFee: input.maintenanceFee,
+    mapUrl: input.mapUrl?.trim() || undefined,
+    description: input.description.trim(),
+    keyFeatures: input.keyFeatures?.length ? input.keyFeatures : undefined,
+    photos: input.photos?.length ? input.photos : [`/media/properties/${slug}/cover.jpg`],
+    videos: input.videos?.length ? input.videos : undefined,
+    featured: input.featured,
+    status: input.status ?? "available",
+    createdAt: new Date().toISOString().slice(0, 10),
+  };
+
+  const json = JSON.stringify({ ...propertiesJson, properties: [...ALL, property] }, null, 2)
+    .replace(/\n/g, "\r\n");
+
+  try {
+    const res = await fetch("/__admin/properties", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(property),
+    });
+    if (res.ok) {
+      ALL.push(property);
+      return { ok: true, property, persisted: true, json };
+    }
+  } catch {
+    // Production builds have no local file middleware; return the JSON fallback.
+  }
+
+  ALL.push(property);
+  return { ok: true, property, persisted: false, json };
 }

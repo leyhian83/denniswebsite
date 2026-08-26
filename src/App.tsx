@@ -13,6 +13,7 @@ import { ContactPage } from "./pages/ContactPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { LoginPage } from "./pages/LoginPage";
 import { AddProjectPage } from "./pages/AddProjectPage";
+import { AddPropertyPage } from "./pages/AddPropertyPage";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
 
 export default function App() {
@@ -62,6 +63,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <AddProjectPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/add-property"
+            element={
+              <ProtectedRoute>
+                <AddPropertyPage />
               </ProtectedRoute>
             }
           />

@@ -560,3 +560,398 @@
   color: var(--color-muted-ink);
   margin: 0;
 }
+
+/* ---------- Add property wizard ---------- */
+.property-wizard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.property-wizard__progress {
+  color: var(--color-whiteout);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.property-wizard__progress ol {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(7.2rem, 1fr));
+  min-width: 42rem;
+  padding: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.property-wizard__progress li {
+  position: relative;
+}
+.property-wizard__progress button {
+  width: 100%;
+  min-height: 3.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  transition: color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);
+}
+.property-wizard__progress button:hover:not(:disabled),
+.property-wizard__progress li.is-active button,
+.property-wizard__progress li.is-complete button {
+  color: var(--color-whiteout);
+}
+.property-wizard__progress li.is-active::after,
+.property-wizard__progress li.is-complete::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -1px;
+  height: 2px;
+  background: var(--color-signal);
+}
+.property-wizard__progress li.is-complete::after {
+  opacity: 0.5;
+}
+.property-wizard__step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: var(--fs-xs);
+}
+.property-wizard__progress-note {
+  margin-top: var(--space-2);
+  text-align: right;
+  color: var(--color-muted);
+  font-size: var(--fs-xs);
+}
+.property-wizard__panel {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-card);
+}
+@media (min-width: 768px) {
+  .property-wizard__panel {
+    padding: var(--space-10);
+  }
+}
+.property-wizard__intro {
+  max-width: 40rem;
+  margin-bottom: var(--space-8);
+}
+.property-wizard__intro .u-eyebrow {
+  color: var(--color-signal-ink);
+  margin-bottom: var(--space-2);
+}
+.property-wizard__intro h2 {
+  font-size: clamp(1.7rem, 2.5vw, 2.5rem);
+  color: var(--color-ink);
+}
+.property-wizard__intro p:last-child {
+  margin-top: var(--space-3);
+  color: var(--color-ink-soft);
+  line-height: var(--lh-loose);
+}
+.property-wizard__fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+@media (min-width: 700px) {
+  .property-wizard__fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.property-wizard__field {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.property-wizard__field--wide {
+  grid-column: 1 / -1;
+}
+.property-wizard__field > label,
+.property-wizard__label,
+.property-wizard__choice legend {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-ink-soft);
+}
+.property-wizard__field input,
+.property-wizard__field select,
+.property-wizard__field textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(27, 27, 27, 0.18);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-ink);
+  font-size: var(--fs-base);
+}
+.property-wizard__field textarea {
+  resize: vertical;
+  min-height: 12rem;
+  line-height: var(--lh-loose);
+}
+.property-wizard__field input:focus-visible,
+.property-wizard__field select:focus-visible,
+.property-wizard__field textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-signal-ink);
+  box-shadow: 0 0 0 3px rgba(26, 86, 200, 0.22);
+}
+.property-wizard__field input[aria-invalid="true"],
+.property-wizard__field select[aria-invalid="true"],
+.property-wizard__field textarea[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+.property-wizard__hint {
+  font-size: var(--fs-xs);
+  color: var(--color-muted-ink);
+}
+.property-wizard__error {
+  color: var(--color-danger);
+  font-size: var(--fs-sm);
+}
+.property-wizard__choice {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+.property-wizard__choice legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+}
+.property-wizard__choice > div,
+.property-wizard__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.property-wizard__choice button,
+.property-wizard__chips button {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.6rem 0.9rem;
+  border: 1px solid rgba(27, 27, 27, 0.28);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink-soft);
+  font-weight: 600;
+  transition: border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+.property-wizard__choice button:hover,
+.property-wizard__choice button.is-selected,
+.property-wizard__chips button:hover,
+.property-wizard__chips button.is-selected {
+  border-color: var(--color-signal-ink);
+  background: rgba(26, 86, 200, 0.08);
+  color: var(--color-signal-ink);
+}
+.property-wizard__chips button {
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+}
+.property-wizard__check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: rgba(27, 27, 27, 0.045);
+  border: 1px solid rgba(27, 27, 27, 0.1);
+  border-radius: var(--radius-md);
+}
+.property-wizard__check--align-end {
+  align-self: end;
+}
+.property-wizard__check input {
+  width: 1.2rem;
+  height: 1.2rem;
+  min-height: 0;
+  margin-top: 0.15rem;
+  accent-color: var(--color-signal-ink);
+  flex-shrink: 0;
+}
+.property-wizard__check strong,
+.property-wizard__check small {
+  display: block;
+}
+.property-wizard__check strong {
+  color: var(--color-ink);
+}
+.property-wizard__check small {
+  margin-top: var(--space-1);
+  color: var(--color-muted-ink);
+}
+.property-wizard__input-prefix,
+.property-wizard__input-suffix {
+  display: flex;
+  align-items: center;
+  min-height: 3rem;
+  background: var(--color-surface-2);
+  border: 1px solid rgba(27, 27, 27, 0.18);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.property-wizard__input-prefix:focus-within,
+.property-wizard__input-suffix:focus-within {
+  border-color: var(--color-signal-ink);
+  box-shadow: 0 0 0 3px rgba(26, 86, 200, 0.22);
+}
+.property-wizard__input-prefix span,
+.property-wizard__input-suffix span {
+  padding-inline: 0.9rem;
+  color: var(--color-muted-ink);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.property-wizard__input-prefix input,
+.property-wizard__input-suffix input {
+  min-height: 2.9rem;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.property-wizard__input-prefix input:focus-visible,
+.property-wizard__input-suffix input:focus-visible {
+  box-shadow: none;
+}
+.property-wizard__input-suffix span {
+  order: 2;
+  border-left: 1px solid rgba(27, 27, 27, 0.1);
+  background: rgba(27, 27, 27, 0.035);
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+}
+.property-wizard__parking,
+.property-wizard__calculation,
+.property-wizard__preview,
+.property-wizard__callout,
+.property-wizard__media {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid rgba(27, 27, 27, 0.12);
+  border-radius: var(--radius-md);
+  background: rgba(27, 27, 27, 0.035);
+}
+.property-wizard__parking p,
+.property-wizard__calculation small,
+.property-wizard__media p,
+.property-wizard__preview small {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-muted-ink);
+  font-size: var(--fs-xs);
+}
+.property-wizard__stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-shrink: 0;
+}
+.property-wizard__stepper button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(27, 27, 27, 0.25);
+  border-radius: 50%;
+  color: var(--color-ink);
+}
+.property-wizard__stepper button:hover {
+  border-color: var(--color-signal-ink);
+  color: var(--color-signal-ink);
+}
+.property-wizard__stepper output {
+  min-width: 1.5rem;
+  text-align: center;
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+.property-wizard__calculation {
+  background: rgba(26, 86, 200, 0.06);
+  border-color: rgba(26, 86, 200, 0.18);
+}
+.property-wizard__calculation > strong {
+  color: var(--color-signal-ink);
+  text-align: right;
+}
+.property-wizard__callout {
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: var(--color-ink-soft);
+  font-size: var(--fs-sm);
+}
+.property-wizard__callout svg {
+  color: var(--color-signal-ink);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.property-wizard__select-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.property-wizard__select-row .property-wizard__hint {
+  flex: 1;
+}
+.property-wizard__preview {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.property-wizard__preview strong {
+  font-size: var(--fs-md);
+}
+.property-wizard__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+.property-wizard__actions .btn:last-child {
+  margin-left: auto;
+}
+@media (max-width: 520px) {
+  .property-wizard__progress {
+    overflow-x: visible;
+  }
+  .property-wizard__progress ol {
+    min-width: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: var(--space-2);
+  }
+  .property-wizard__progress button {
+    min-height: 3rem;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.68rem;
+  }
+  .property-wizard__panel {
+    padding: var(--space-5);
+  }
+  .property-wizard__parking,
+  .property-wizard__calculation,
+  .property-wizard__media {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .property-wizard__select-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

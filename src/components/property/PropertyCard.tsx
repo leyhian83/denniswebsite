@@ -89,6 +89,13 @@ export function PropertyCard({ property, className = "" }: PropertyCardProps) {
           </span>
         </p>
 
+        {property.furnishing && (
+          <p className="property-card__highlight">
+            <span>{property.furnishing}</span>
+            {property.maintenanceFee ? <span>RM {property.maintenanceFee.toLocaleString("en-MY")} / mo</span> : null}
+          </p>
+        )}
+
         {rows.length > 0 && (
           <dl className="property-card__specs">
             {rows.map((row, i) => {

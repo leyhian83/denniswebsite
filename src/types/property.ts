@@ -12,6 +12,10 @@ export type TransactionType = "subsale";
 
 export type PropertyStatus = "available" | "reserved" | "sold";
 
+export type PropertyTitleType = "individual" | "strata" | "master";
+
+export type BumiLotStatus = "yes" | "no" | "not-specified";
+
 export type VideoSource = {
   type: "local" | "youtube";
   url: string;
@@ -48,6 +52,28 @@ export interface Property {
 
   tenure?: string;
   furnishing?: string;
+  furnishingDetails?: string[];
+
+  /** Optional public-facing listing title; falls back to `title`. */
+  headline?: string;
+  completionYear?: number;
+  titleType?: PropertyTitleType;
+  bumiLot?: BumiLotStatus;
+  facingDirection?: string;
+  maintenanceFee?: number;
+
+  /** Optional dimensions used to add context to the built-up area. */
+  builtUpWidthFt?: number;
+  builtUpLengthFt?: number;
+
+  /** Keep sensitive unit details in the record but suppress them publicly. */
+  block?: string;
+  unitNumber?: string;
+  floor?: string;
+  hideAddressDetails?: boolean;
+
+  /** Optional external map link supplied by the listing author. */
+  mapUrl?: string;
 
   description: string;
 

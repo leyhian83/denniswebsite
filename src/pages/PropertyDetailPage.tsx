@@ -10,6 +10,10 @@ import {
   Check,
   Clock,
   Tag,
+  Compass,
+  Building2,
+  CircleDollarSign,
+  Map,
 } from "lucide-react";
 import { useState } from "react";
 import { Gallery } from "../components/common/Gallery";
@@ -19,6 +23,7 @@ import { usePageMeta } from "../hooks/usePageMeta";
 import {
   getPropertyBySlug,
   getSimilarProperties,
+  getPricePerSqFt,
 } from "../services/propertyService";
 import { NotFoundPage } from "./NotFoundPage";
 import {
@@ -65,6 +70,7 @@ export function PropertyDetailPage() {
   const videos = property.videos ?? [];
 
   // Detail rows shown only when a value is present.
+  const pricePerSqFt = getPricePerSqFt(property);
   const details = [
     { label: "Price", value: formatPrice(property.price), icon: Tag },
     { label: "Property Type", value: slugToTitle(property.propertyType), icon: Tag },
@@ -77,13 +83,29 @@ export function PropertyDetailPage() {
     { label: "Built-up", value: formatSqFt(property.builtUpSqFt), icon: Maximize },
     { label: "Land Area", value: formatSqFt(property.landAreaSqFt), icon: Ruler },
     { label: "Furnishing", value: property.furnishing, icon: Check },
+    {
+      label: "Dimensions",
+      value: property.builtUpWidthFt && property.builtUpLengthFt
+        ? `${property.builtUpWidthFt} × ${property.builtUpLengthFt} ft`
+        : undefined,
+      icon: Ruler,
+    },
+    { label: "Completion", value: property.completionYear, icon: Clock },
+    { label: "Title Type", value: property.titleType ? slugToTitle(property.titleType) : undefined, icon: Building2 },
+    { label: "Bumi Lot", value: property.bumiLot && property.bumiLot !== "not-specified" ? property.bumiLot === "yes" ? "Yes" : "No" : undefined, icon: BadgeCheck },
+    { label: "Direction", value: property.facingDirection, icon: Compass },
+    { label: "Maintenance", value: property.maintenanceFee ? formatPrice(property.maintenanceFee) + " / month" : undefined, icon: CircleDollarSign },
+    { label: "Price per sqft", value: pricePerSqFt ? `RM ${pricePerSqFt.toLocaleString("en-MY", { maximumFractionDigits: 2 })}` : undefined, icon: CircleDollarSign },
   ].filter((d) => d.value) as { label: string; value: string; icon: typeof Tag }[];
 
   const locationLines = [
     { label: "State", value: property.state },
     { label: "Area", value: property.area },
     { label: "Sub-area", value: property.subArea },
-    { label: "Address", value: property.address },
+    { label: "Address", value: property.hideAddressDetails ? undefined : property.address },
+    { label: "Block", value: property.hideAddressDetails ? undefined : property.block },
+    { label: "Unit / house no.", value: property.hideAddressDetails ? undefined : property.unitNumber },
+    { label: "Floor", value: property.hideAddressDetails ? undefined : property.floor },
   ].filter((l) => l.value) as { label: string; value: string }[];
 
   const hasPhotos = property.photos.length > 0;
@@ -226,6 +248,19 @@ export function PropertyDetailPage() {
                 </section>
               )}
 
+              {property.furnishingDetails && property.furnishingDetails.length > 0 && (
+                <section className="detail-section" aria-labelledby="detail-furnishing">
+                  <h2 id="detail-furnishing" className="detail-section__title">Furnishing details</h2>
+                  <ul className="detail-features detail-features--chips" role="list">
+                    {property.furnishingDetails.map((detail) => (
+                      <li key={detail} className="detail-feature detail-feature--chip">
+                        <Check size={16} aria-hidden="true" /> {detail}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
               {/* Location */}
               <section className="detail-section" aria-labelledby="detail-location">
                 <h2 id="detail-location" className="detail-section__title">Location</h2>
@@ -237,10 +272,15 @@ export function PropertyDetailPage() {
                     </div>
                   ))}
                 </dl>
-                <p className="detail-location__note">
-                  Map integration is coming soon. For exact coordinates or a
-                  viewing, just ask.
-                </p>
+                {property.hideAddressDetails && <p className="detail-location__note">Unit-level details are kept private. Ask Dennis Property for the exact address and a viewing.</p>}
+                {property.mapUrl ? (
+                  <a className="detail-map" href={property.mapUrl} target="_blank" rel="noopener noreferrer">
+                    <Map size={20} aria-hidden="true" />
+                    <span><strong>View approximate location</strong><small>Open map directions in a new tab</small></span>
+                  </a>
+                ) : (
+                  <p className="detail-location__note"><Map size={16} aria-hidden="true" /> Approximate location shown. For exact directions or a viewing, just ask.</p>
+                )}
               </section>
             </div>
 
