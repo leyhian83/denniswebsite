@@ -25,3 +25,6 @@ dist-ssr
 
 # QA screenshots
 qa-shots/
+
+# Local Vercel project metadata
+.vercel
