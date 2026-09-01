@@ -119,6 +119,11 @@
 .property-card__price .property-card__negotiable {
   margin-left: auto;
 }
+.property-card__rental {
+  color: var(--color-signal-ink);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
 
 .property-card__location {
   display: flex;

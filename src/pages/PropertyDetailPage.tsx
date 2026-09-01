@@ -55,7 +55,7 @@ export function PropertyDetailPage() {
     property
       ? {
           title: property.title,
-          description: `${property.title} — ${formatPrice(property.price)}. ${
+          description: `${property.title} — ${formatPrice(property.price, property.priceLabel)}. ${
             CATEGORY_LABELS[property.category]
           } property in ${property.area}, ${property.state}.`,
         }
@@ -68,11 +68,14 @@ export function PropertyDetailPage() {
 
   const similar = getSimilarProperties(property);
   const videos = property.videos ?? [];
+  const displayPrice = formatPrice(property.price, property.priceLabel);
+  const priceLabel = property.priceLabel ? "Price" : "Asking price";
 
   // Detail rows shown only when a value is present.
   const pricePerSqFt = getPricePerSqFt(property);
   const details = [
-    { label: "Price", value: formatPrice(property.price), icon: Tag },
+    { label: "Price", value: displayPrice, icon: Tag },
+    { label: "Monthly Rent", value: property.rentalPrice ? `${formatPrice(property.rentalPrice)} / month` : undefined, icon: CircleDollarSign },
     { label: "Property Type", value: slugToTitle(property.propertyType), icon: Tag },
     { label: "Category", value: CATEGORY_LABELS[property.category], icon: Tag },
     { label: "Transaction", value: "Subsale", icon: Clock },
@@ -98,10 +101,15 @@ export function PropertyDetailPage() {
     { label: "Price per sqft", value: pricePerSqFt ? `RM ${pricePerSqFt.toLocaleString("en-MY", { maximumFractionDigits: 2 })}` : undefined, icon: CircleDollarSign },
   ].filter((d) => d.value) as { label: string; value: string; icon: typeof Tag }[];
 
+  const additionalDetails = (property.additionalDetails ?? []).map((detail) => ({
+    ...detail,
+    icon: Building2,
+  }));
+
   const detailGroups = [
     {
       label: "At a glance",
-      items: details.filter((detail) => ["Price", "Property Type", "Category", "Transaction", "Tenure"].includes(detail.label)),
+      items: details.filter((detail) => ["Price", "Monthly Rent", "Property Type", "Category", "Transaction", "Tenure"].includes(detail.label)),
     },
     {
       label: "Space & rooms",
@@ -110,6 +118,10 @@ export function PropertyDetailPage() {
     {
       label: "Condition & costs",
       items: details.filter((detail) => ["Furnishing", "Completion", "Title Type", "Bumi Lot", "Direction", "Maintenance", "Price per sqft"].includes(detail.label)),
+    },
+    {
+      label: "Operational details",
+      items: additionalDetails,
     },
   ].filter((group) => group.items.length > 0);
 
@@ -203,7 +215,7 @@ export function PropertyDetailPage() {
                         />
                       </div>
                     ) : (
-                      <video key={i} controls className="detail-video__frame detail-video__frame--local">
+                        <video key={i} controls preload="metadata" poster={v.poster} className="detail-video__frame detail-video__frame--local">
                         <source src={v.url} />
                         Your browser does not support the video tag.
                       </video>
@@ -214,9 +226,9 @@ export function PropertyDetailPage() {
 
               {/* Price prominent on mobile */}
               <div className="detail-price-mobile">
-                <span className="detail-price-mobile__label">Asking price</span>
+                <span className="detail-price-mobile__label">{priceLabel}</span>
                 <span className="detail-price-mobile__value">
-                  {formatPrice(property.price)}
+                  {displayPrice}
                   {property.negotiable && (
                     <span className="detail-price-mobile__negotiable">Negotiable</span>
                   )}
@@ -310,9 +322,9 @@ export function PropertyDetailPage() {
             <aside className="detail-sidebar">
               <div className="detail-sidebar__sticky">
                 <div className="detail-sidebar__price">
-                  <span className="detail-sidebar__price-label">Asking price</span>
+                  <span className="detail-sidebar__price-label">{priceLabel}</span>
                   <span className="detail-sidebar__price-value">
-                    {formatPrice(property.price)}
+                    {displayPrice}
                     {property.negotiable && (
                       <span className="detail-sidebar__price-negotiable">Negotiable</span>
                     )}

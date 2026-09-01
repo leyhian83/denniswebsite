@@ -1,7 +1,7 @@
 /** Formatting helpers for prices, areas and property attributes. */
 
-export function formatPrice(value: number | undefined): string {
-  if (value == null || value === 0) return "";
+export function formatPrice(value: number | undefined, fallback?: string): string {
+  if (value == null || value === 0) return fallback ?? "";
   return "RM " + new Intl.NumberFormat("en-MY", {
     maximumFractionDigits: 0,
   }).format(value);

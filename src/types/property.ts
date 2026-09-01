@@ -19,6 +19,12 @@ export type BumiLotStatus = "yes" | "no" | "not-specified";
 export type VideoSource = {
   type: "local" | "youtube";
   url: string;
+  poster?: string;
+};
+
+export type PropertyAdditionalDetail = {
+  label: string;
+  value: string;
 };
 
 export interface Property {
@@ -39,6 +45,10 @@ export interface Property {
 
   price: number;
   currency: "MYR";
+  /** Use when the owner has not set a public numerical price. */
+  priceLabel?: string;
+  /** Optional monthly rent, including reported income for a tenanted investment. */
+  rentalPrice?: number;
 
   /** When true, the asking price is negotiable (defaults to false / firm). */
   negotiable?: boolean;
@@ -78,6 +88,7 @@ export interface Property {
   description: string;
 
   keyFeatures?: string[];
+  additionalDetails?: PropertyAdditionalDetail[];
 
   photos: string[];
 

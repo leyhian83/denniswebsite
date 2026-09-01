@@ -14,6 +14,7 @@ import {
 import type {
   BumiLotStatus,
   Property,
+  PropertyAdditionalDetail,
   PropertyCategory,
   PropertyStatus,
   PropertyTitleType,
@@ -64,6 +65,8 @@ export interface PropertyInput {
   floor?: string;
   hideAddressDetails?: boolean;
   price: number;
+  priceLabel?: string;
+  rentalPrice?: number;
   negotiable?: boolean;
   bedrooms?: number;
   bathrooms?: number;
@@ -84,6 +87,7 @@ export interface PropertyInput {
   headline?: string;
   description: string;
   keyFeatures?: string[];
+  additionalDetails?: PropertyAdditionalDetail[];
   photos: string[];
   videos?: VideoSource[];
   featured?: boolean;
@@ -170,7 +174,10 @@ function blobToBase64(blob: Blob): Promise<string> {
 }
 
 export function getFeaturedProperties(limit?: number): Property[] {
-  const featured = ALL.filter((p) => p.featured);
+  const featured = ALL.filter((p) => p.featured).sort(
+    (a, b) =>
+      new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime(),
+  );
   return limit ? featured.slice(0, limit) : featured;
 }
 
@@ -280,10 +287,18 @@ export function filterProperties(
 
   switch (sort) {
     case "price-asc":
-      results = [...results].sort((a, b) => a.price - b.price);
+      results = [...results].sort(
+        (a, b) =>
+          (a.price > 0 ? a.price : Number.POSITIVE_INFINITY) -
+          (b.price > 0 ? b.price : Number.POSITIVE_INFINITY),
+      );
       break;
     case "price-desc":
-      results = [...results].sort((a, b) => b.price - a.price);
+      results = [...results].sort(
+        (a, b) =>
+          (b.price > 0 ? b.price : Number.NEGATIVE_INFINITY) -
+          (a.price > 0 ? a.price : Number.NEGATIVE_INFINITY),
+      );
       break;
     case "newest":
     default:
@@ -307,7 +322,7 @@ export function getSimilarProperties(property: Property, limit = 4): Property[] 
     normalize(p.area) === normalize(property.area) ||
     normalize(p.subArea) === normalize(property.subArea);
   const priceNear = (p: Property) =>
-    Math.abs(p.price - property.price) / property.price <= 0.5;
+    property.price > 0 && p.price > 0 && Math.abs(p.price - property.price) / property.price <= 0.5;
 
   const scored = ALL.filter((p) => p.id !== property.id && p.status !== "sold").map(
     (p) => {
@@ -380,6 +395,8 @@ export async function createProperty(input: PropertyInput): Promise<CreateProper
     hideAddressDetails: input.hideAddressDetails,
     price: input.price,
     currency: "MYR",
+    priceLabel: input.priceLabel?.trim() || undefined,
+    rentalPrice: input.rentalPrice,
     negotiable: input.negotiable,
     bedrooms: input.bedrooms,
     bathrooms: input.bathrooms,
@@ -399,6 +416,7 @@ export async function createProperty(input: PropertyInput): Promise<CreateProper
     mapUrl: input.mapUrl?.trim() || undefined,
     description: input.description.trim(),
     keyFeatures: input.keyFeatures?.length ? input.keyFeatures : undefined,
+    additionalDetails: input.additionalDetails?.length ? input.additionalDetails : undefined,
     photos: input.photos?.length ? input.photos : [`/media/properties/${slug}/cover.jpg`],
     videos: input.videos?.length ? input.videos : undefined,
     featured: input.featured,

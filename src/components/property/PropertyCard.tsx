@@ -72,11 +72,17 @@ export function PropertyCard({ property, className = "" }: PropertyCardProps) {
         </h3>
 
         <p className="property-card__price">
-          {formatPrice(property.price)}
+          {formatPrice(property.price, property.priceLabel)}
           {property.negotiable && (
             <span className="property-card__negotiable">Negotiable</span>
           )}
         </p>
+
+        {property.rentalPrice ? (
+          <p className="property-card__rental">
+            Rent {formatPrice(property.rentalPrice)} / month
+          </p>
+        ) : null}
 
         <p className="property-card__location">
           <MapPin size={14} aria-hidden="true" />
